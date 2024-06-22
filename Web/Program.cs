@@ -1,3 +1,6 @@
+using Application;
+using Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,7 +14,8 @@ builder.Services.Configure<RouteOptions>(options =>
     options.LowercaseQueryStrings = true;
 });
 builder.Services.AddProblemDetails();
-
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 const string corsPolicy = "AllowAll";
 builder.Services.AddCors(options =>
 {
