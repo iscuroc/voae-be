@@ -1,5 +1,6 @@
 using Application;
 using Infrastructure;
+using Web.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,7 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 var app = builder.Build();
 
