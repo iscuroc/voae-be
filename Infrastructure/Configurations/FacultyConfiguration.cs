@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configurations;
 
-public class StatusConfiguration : IEntityTypeConfiguration<Status>
+public class FacultyConfiguration : IEntityTypeConfiguration<Faculty>
 {
-    public void Configure(EntityTypeBuilder<Status> builder)
+    public void Configure(EntityTypeBuilder<Faculty> builder)
     {
         builder.Property(x => x.Name)
             .HasMaxLength(50)

@@ -4,5 +4,5 @@ namespace Domain.Contracts;
 
 public interface IUserRepository
 {
-    Task<User?> GetUserByEmailAsync(string email);
+    Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken = default);
 }
