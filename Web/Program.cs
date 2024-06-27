@@ -1,5 +1,6 @@
 using Application;
 using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Web.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,5 +44,12 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors(corsPolicy);
+
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dataContext.Database.Migrate();
+}
+
 app.Run();
 
