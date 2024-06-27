@@ -32,15 +32,6 @@ public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
             .IsRequired();
         */
 
-        builder.Property(x => x.StartDate)
-            .IsRequired();
-
-        builder.Property(x => x.EndDate)
-            .IsRequired();
-
-        builder.Property(x => x.TotalSpots)
-            .IsRequired();
-
         /*builder.Property(x => x.SupervisorId)
             .IsRequired();
         */
@@ -48,8 +39,5 @@ public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
         /*builder.Property(x => x.RequestedById)
             .IsRequired();
         */
-
-        builder.Property(x => x.RequestDate)
-            .IsRequired();
     }
 }

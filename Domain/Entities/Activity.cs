@@ -13,7 +13,7 @@ public class Activity : EntityBase
     //public required Career CareerId { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public required int TotalSpots { get; set; }
+    public int TotalSpots { get; set; }
     public string? BannerLink { get; set; }
     //public required User SupervisorId { get; set; }
     //public required User RequestedById { get; set; }
