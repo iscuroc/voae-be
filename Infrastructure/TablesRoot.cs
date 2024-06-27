@@ -6,6 +6,7 @@ namespace Infrastructure;
 public abstract class TablesRoot(DbContextOptions options) : DbContext(options)
 {
     public required DbSet<User> Users { get; set; }
+    public required DbSet<Faculty> Faculties { get; set; }
     public required DbSet<Career> Careers {get; set;}       
 
 }
