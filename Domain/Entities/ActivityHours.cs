@@ -3,7 +3,7 @@ using Domain.Enums;
 namespace Domain.Entities;
 
 
-public class ActivitiesHours
+public class ActivityHours
 {
     public ActivityScope ActivityScope {get; set; }
     
