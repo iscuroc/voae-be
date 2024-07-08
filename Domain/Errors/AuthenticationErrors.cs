@@ -8,5 +8,8 @@ public static class AuthenticationErrors
         "Authentication.InvalidCredentials",
         "Invalid credentials"
     );
-    
+    public static Error EmailInUse => Error.Conflict(
+        "Authentication.EmailInUse",
+        "Email is already in use"
+    );
 }
