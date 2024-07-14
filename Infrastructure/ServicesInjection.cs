@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Text;
+using Application.Contracts;
+using Infrastructure.EmailSender;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +15,8 @@ public static class ServicesInjection
 {
     public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IEmailSender, MailgunService>();
+        
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<ApplicationDbContext>(options =>
         {

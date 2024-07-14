@@ -30,8 +30,8 @@ public class RegisterUserCommandHandler(
             EmailConfirmationTokenExpiresAt = DateTime.UtcNow.AddDays(3)
         };
         await userRepository.AddUserAsync(newUser, cancellationToken);
-        
-        await userNotificationService.SendConfirmationInstructionsAsync(cancellationToken);
+
+        await userNotificationService.SendConfirmationInstructionsAsync(newUser.Email, token, cancellationToken);
         
         return Result.Success();
     }
