@@ -20,7 +20,7 @@ public static class ServicesInjection
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(connectionString, opt =>
+            options.UseNpgsql(connectionString, opt =>
             {
                 opt.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
             });
