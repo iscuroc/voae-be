@@ -1,9 +1,10 @@
+using Domain.Base;
 using Domain.Enums;
 
 namespace Domain.Entities;
 
 
-public class ActivityHours
+public class ActivityHour: EntityBase
 {
     public ActivityScope ActivityScope {get; set; }
     
