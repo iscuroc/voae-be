@@ -1,4 +1,5 @@
-﻿namespace Application.Contracts;
+﻿
+namespace Application.Contracts;
 
 public interface IUserNotificationService
 {
@@ -7,5 +8,8 @@ public interface IUserNotificationService
         string token,
         CancellationToken cancellationToken = default
     );
+    
     Task SendResetPasswordInstructionsAsync(CancellationToken cancellationToken = default);
+
+    Task SendWelcomeEmailAsync(string to, CancellationToken cancellationToken = default);
 }
