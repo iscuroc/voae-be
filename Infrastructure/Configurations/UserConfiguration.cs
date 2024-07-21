@@ -11,7 +11,7 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
         builder.Property(x => x.Names)
             .HasMaxLength(50);
         
-        builder.Property(x => x.Lastname)
+        builder.Property(x => x.Lastnames)
             .HasMaxLength(50);
         
         builder.Property(x => x.Email)
@@ -19,9 +19,10 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
         
         builder.HasIndex(x => x.Email)
             .IsUnique();
-        
+
         builder.HasIndex(x => x.AccountNumber)
-            .IsUnique();
-        
+            .IsUnique()
+            .HasFilter("\"AccountNumber\" IS NOT NULL");
+
     }
 }
