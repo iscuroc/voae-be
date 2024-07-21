@@ -16,7 +16,7 @@ public record LoginCommandHandler(
 {
     public async ValueTask<Result<TokenResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await UserRepository.GetUserByEmailAsync(request.Email, cancellationToken);
+        var user = await UserRepository.GetByEmailAsync(request.Email, cancellationToken);
         if (user is null) return Result.Failure<TokenResponse>(AuthenticationErrors.InvalidCredentials);
         
         var isPasswordValid = PasswordHasher.VerifyPassword(request.Password, user.Password);

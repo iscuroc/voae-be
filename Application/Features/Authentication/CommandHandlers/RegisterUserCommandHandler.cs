@@ -29,7 +29,7 @@ public class RegisterUserCommandHandler(
             EmailConfirmationSentAt = DateTime.UtcNow,
             EmailConfirmationTokenExpiresAt = DateTime.UtcNow.AddDays(3)
         };
-        await userRepository.AddUserAsync(newUser, cancellationToken);
+        await userRepository.AddAsync(newUser, cancellationToken);
 
         await userNotificationService.SendConfirmationInstructionsAsync(newUser.Email, token, cancellationToken);
         
