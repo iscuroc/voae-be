@@ -28,4 +28,9 @@ public class UserNotificationService(
     {
         throw new NotImplementedException();
     }
+
+    public async Task SendWelcomeEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -2,5 +2,7 @@
 
 public enum Role
 {
-    Student
+    Student,
+    Teacher,
+    Voae
 }
