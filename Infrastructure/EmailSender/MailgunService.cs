@@ -7,7 +7,7 @@ namespace Infrastructure.EmailSender;
 
 public class MailgunService(IConfiguration configuration) : IEmailSender
 {
-    public async Task SendEmailAsync(string to, string subject, string text)
+    public async Task SendEmailAsync(string to, string subject, string text, CancellationToken cancellationToken = default)
     {
         string apiKey = configuration["Mailgun:ApiKey"]!;
         string domain = configuration["Mailgun:Domain"]!;
@@ -32,6 +32,6 @@ public class MailgunService(IConfiguration configuration) : IEmailSender
         request.AddParameter("subject", subject);
         request.AddParameter("html", text);
 
-        await client.ExecuteAsync(request);
+        await client.ExecuteAsync(request, cancellationToken);
     }
 }
