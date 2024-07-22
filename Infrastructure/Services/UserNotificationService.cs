@@ -46,6 +46,7 @@ public class UserNotificationService(
     )
     {
         var subject = "Portal Curoc - Su contraseña ha sido restablecida";
+        var host = configuration["Frontend:Url"]!;
         var html = $@"
             <h1>Portal Curoc</h1>
             <p>Su contraseña ha sido restablecida exitosamente. Si usted no realizó esta solicitud, por favor contacte con nuestro soporte.</p>";
