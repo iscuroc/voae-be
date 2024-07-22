@@ -35,7 +35,7 @@ public static class AuthenticationErrors
         "Account number is already in use"
     );
     
-    public static Error NotFound => Error.Conflict(
+    public static Error NotFound => Error.NotFound(
         "Authentication.NotFound",
         "Account not found"
     );
