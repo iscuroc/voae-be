@@ -4,6 +4,12 @@ namespace Domain.Errors;
 
 public static class AuthenticationErrors
 {
+    
+    public static Error UserNotFound => Error.Conflict(
+        "Authentication.UserNotFound",
+        "User Not Found"
+    );
+
     public static Error InvalidCredentials => Error.Unauthorized(
         "Authentication.InvalidCredentials",
         "Invalid credentials"
