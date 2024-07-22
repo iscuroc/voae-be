@@ -20,7 +20,7 @@ namespace Application.Features.Authentication.CommandHandlers
             CancellationToken cancellationToken)
         {
             var user = await userRepository.GetByEmailAsync(request.Email, cancellationToken);
-            if (user is null) return Result.Failure(AuthenticationErrors.InvalidAccountNumber);
+            if (user is null) return Result.Failure(AuthenticationErrors.NotFound);
 
             var token = Guid.NewGuid().ToString();
             user.PasswordResetToken = token;
