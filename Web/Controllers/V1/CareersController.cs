@@ -1,11 +1,13 @@
 ﻿using Application.Features.Careers.Models;
 using Application.Features.Careers.Queries;
 using Mediator;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Extensions;
 
 namespace Web.Controllers.V1;
 
+[AllowAnonymous]
 public class CareersController(ISender sender) : BaseController
 {
     [HttpGet]
