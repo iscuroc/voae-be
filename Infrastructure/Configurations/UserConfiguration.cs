@@ -23,6 +23,18 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
         builder.HasIndex(x => x.AccountNumber)
             .IsUnique()
             .HasFilter("\"AccountNumber\" IS NOT NULL");
-
+        
+        builder.HasIndex(x => x.EmailConfirmationToken)
+            .IsUnique()
+            .HasFilter("\"EmailConfirmationToken\" IS NOT NULL");
+        
+        builder.HasIndex(x => x.PasswordResetToken)
+            .IsUnique() 
+            .HasFilter("\"PasswordResetToken\" IS NOT NULL");
+        
+        builder.HasOne(x => x.Career)
+            .WithMany(c => c.Users)
+            .HasForeignKey(x => x.CareerId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

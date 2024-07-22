@@ -6,9 +6,8 @@ namespace Application.Behaviors;
 
 public sealed class ValidationBehavior<TMessage, TResponse>(
     IValidator<TMessage> validator
-) : IPipelineBehavior<TMessage, TResponse> where TMessage : IMessage
+) : IPipelineBehavior<TMessage, TResponse> where TMessage : IBaseCommand
 {
-
     public async ValueTask<TResponse> Handle(
         TMessage message,
         CancellationToken cancellationToken,

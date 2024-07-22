@@ -8,6 +8,7 @@ public record ConfirmUserCommand(
     string Lastnames,
     long AccountNumber,
     string Password,
+    int CareerId,
     string PasswordConfirmation,
     string EmailConfirmationToken
 ) : ICommand<Result>;
