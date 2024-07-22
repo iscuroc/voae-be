@@ -39,4 +39,9 @@ public static class AuthenticationErrors
         "Authentication.NotFound",
         "Account not found"
     );
+    
+    public static Error PasswordDontMatch => Error.Conflict(
+        "Authentication.PasswordDontMatch",
+        "Password dont match"
+    );
 }
