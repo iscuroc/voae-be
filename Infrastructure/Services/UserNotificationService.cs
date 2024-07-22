@@ -8,24 +8,37 @@ public class UserNotificationService(
     IConfiguration configuration
 ) : IUserNotificationService
 {
+
     public async Task SendConfirmationInstructionsAsync(
         string to,
         string token,
-        CancellationToken cancellationToken = default
-    )
+        CancellationToken cancellationToken = default)
     {
         var subject = "Portal Curoc - Confirme su correo electrónico";
-        var host = configuration["Frontend:Url"]!;
+        var host = configuration["Frontend:Url"];
         var html = $@"
-            <h1>Portal Curoc</h1>
-            <p>Por favor, confirme su correo electrónico haciendo clic en el siguiente enlace:</p>
-            <a href='{host}/confirm-email?token={token}'>Confirmar correo electrónico</a>";
+                <h1>Portal Curoc</h1>
+                <p>Por favor, confirme su correo electrónico haciendo clic en el siguiente enlace:</p>
+                <a href='{host}/confirm-email?token={token}'>Confirmar correo electrónico</a>";
 
         await emailSender.SendEmailAsync(to, subject, html);
     }
 
-    public async Task SendResetPasswordInstructionsAsync(CancellationToken cancellationToken = default)
+    public async Task SendResetPasswordInstructionsAsync(
+        string to,
+        string token,
+        CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var subject = "Portal Curoc - Restablezca su contraseña";
+        var host = configuration["Frontend:Url"];
+        var html = $@"
+                <h1>Portal Curoc</h1>
+                <p>Por favor, restablezca su contraseña haciendo clic en el siguiente enlace:</p>
+                <a href='{host}/reset-password?token={token}'>Restablecer contraseña</a>";
+
+        await emailSender.SendEmailAsync(to, subject, html);
+        
     }
+    
+    
 }

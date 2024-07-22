@@ -14,7 +14,7 @@ namespace Application.Features.Authentication.CommandHandlers
         IUserNotificationService userNotificationService,
         IUserRepository userRepository
     )
-    : ICommandHandler<ResetPasswordCommand, Result>
+        : ICommandHandler<ResetPasswordCommand, Result>
     {
         public async ValueTask<Result> Handle(ResetPasswordCommand request,
             CancellationToken cancellationToken)

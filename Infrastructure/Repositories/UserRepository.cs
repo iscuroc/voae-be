@@ -26,4 +26,24 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     { 
         return await context.Users.AnyAsync(u => u.Email == email, cancellationToken);
     }
+    
+    
+    public async Task UpdateUserAsync(User user, CancellationToken cancellationToken = default)
+    {
+        var existingUser = await context.Users
+            .Where(u => u.Email == user.Email) 
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (existingUser == null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+
+        
+        existingUser.PasswordResetToken = user.PasswordResetToken;
+        existingUser.PasswordResetTokenExpiresAt = user.PasswordResetTokenExpiresAt;
+        
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
 }
