@@ -3,6 +3,7 @@ using System;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240721172823_UpdateUserTable")]
+    partial class UpdateUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,7 +90,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Activities", (string)null);
+                    b.ToTable("Activities");
                 });
 
             modelBuilder.Entity("Domain.Entities.ActivityHour", b =>
@@ -115,7 +118,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ActivityHours", (string)null);
+                    b.ToTable("ActivityHours");
                 });
 
             modelBuilder.Entity("Domain.Entities.Career", b =>
@@ -129,9 +132,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("FacultyId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -142,60 +142,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FacultyId");
-
-                    b.ToTable("Careers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 1,
-                            Name = "Ingeniería en Sistemas"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Ingeniería Agroindustrial"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Licenciatura en Comercio Internacional"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 3,
-                            Name = "Licenciatura en Desarrollo Local"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Licenciatura en Administración de Empresas"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Técnico en Administración de Empresas Cafetaleras"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 1,
-                            Name = "Técnico en Producción Agrícola"
-                        });
+                    b.ToTable("Careers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Faculty", b =>
@@ -211,35 +158,15 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Faculties", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ingeniería"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ciencias Económicas Administrativas y Contables"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ciencias Sociales"
-                        });
+                    b.ToTable("Faculties");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -252,9 +179,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<long?>("AccountNumber")
                         .HasColumnType("bigint");
-
-                    b.Property<int?>("CareerId")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -308,51 +232,10 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("\"AccountNumber\" IS NOT NULL");
 
-                    b.HasIndex("CareerId");
-
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("EmailConfirmationToken")
-                        .IsUnique()
-                        .HasFilter("\"EmailConfirmationToken\" IS NOT NULL");
-
-                    b.HasIndex("PasswordResetToken")
-                        .IsUnique()
-                        .HasFilter("\"PasswordResetToken\" IS NOT NULL");
-
-                    b.ToTable("Users", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.Career", b =>
-                {
-                    b.HasOne("Domain.Entities.Faculty", "Faculty")
-                        .WithMany("Careers")
-                        .HasForeignKey("FacultyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Faculty");
-                });
-
-            modelBuilder.Entity("Domain.Entities.User", b =>
-                {
-                    b.HasOne("Domain.Entities.Career", "Career")
-                        .WithMany("Users")
-                        .HasForeignKey("CareerId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Career");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Career", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Faculty", b =>
-                {
-                    b.Navigation("Careers");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -21,7 +21,7 @@ public class UserNotificationService(
             <p>Por favor, confirme su correo electrónico haciendo clic en el siguiente enlace:</p>
             <a href='{host}/confirm-email?token={token}'>Confirmar correo electrónico</a>";
 
-        await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
+        await emailSender.SendEmailAsync(to, subject, html);
     }
 
     public async Task SendResetPasswordInstructionsAsync(CancellationToken cancellationToken = default)

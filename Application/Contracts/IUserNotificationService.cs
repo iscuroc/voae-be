@@ -1,5 +1,4 @@
-﻿
-namespace Application.Contracts;
+﻿namespace Application.Contracts;
 
 public interface IUserNotificationService
 {
