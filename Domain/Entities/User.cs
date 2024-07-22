@@ -17,6 +17,9 @@ public class User : EntityBase
     public string? PasswordResetToken { get; set; }
     public DateTime? PasswordResetTokenSentAt { get; set; }
     public DateTime? PasswordResetTokenExpiresAt { get; set; }
+    
+    public int? CareerId { get; set; }
+    public Career? Career { get; set; }
 
     public Role Role { get; set; }
 

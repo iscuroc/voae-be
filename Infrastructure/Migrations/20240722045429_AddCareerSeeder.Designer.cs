@@ -3,6 +3,7 @@ using System;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240722045429_AddCareerSeeder")]
+    partial class AddCareerSeeder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,7 +90,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Activities", (string)null);
+                    b.ToTable("Activities");
                 });
 
             modelBuilder.Entity("Domain.Entities.ActivityHour", b =>
@@ -115,7 +118,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ActivityHours", (string)null);
+                    b.ToTable("ActivityHours");
                 });
 
             modelBuilder.Entity("Domain.Entities.Career", b =>
@@ -144,7 +147,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("FacultyId");
 
-                    b.ToTable("Careers", (string)null);
+                    b.ToTable("Careers");
 
                     b.HasData(
                         new
@@ -219,7 +222,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Faculties", (string)null);
+                    b.ToTable("Faculties");
 
                     b.HasData(
                         new
@@ -321,7 +324,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("\"PasswordResetToken\" IS NOT NULL");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.Career", b =>

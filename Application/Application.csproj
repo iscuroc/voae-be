@@ -22,9 +22,4 @@
       <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Features\Authentication\Queries\" />
-      <Folder Include="Features\Authentication\QueryHandlers\" />
-    </ItemGroup>
-
 </Project>
