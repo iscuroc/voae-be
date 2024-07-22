@@ -11,7 +11,7 @@ public class PasswordResetController(ISender sender) : BaseController
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResult> PostAsync(ResetPasswordCommand command)
+    public async Task<IResult> PostAsync(PasswordResetCommand command)
     {
         var result = await sender.Send(command);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
