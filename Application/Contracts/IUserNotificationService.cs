@@ -15,13 +15,13 @@ public interface IUserNotificationService
     );
     
     Task SendWelcomeEmailAsync(
-        string email, 
+        string to,
         CancellationToken cancellationToken = default
-    
     );
 
     Task SendPasswordResetConfirmationAsync(
         string to,
         CancellationToken cancellationToken = default
     );
+    
 }

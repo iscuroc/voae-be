@@ -14,14 +14,15 @@ public class UserNotificationService(
         CancellationToken cancellationToken = default
     )
     {
-        var subject = "Portal Curoc - Confirme su correo electrónico";
+        const string subject = "Portal Curoc - Confirme su correo electrónico";
         var host = configuration["Frontend:Url"]!;
-        var html = $@"
-            <h1>Portal Curoc</h1>
-            <p>Por favor, confirme su correo electrónico haciendo clic en el siguiente enlace:</p>
-            <a href='{host}/confirm-email?token={token}'>Confirmar correo electrónico</a>";
+        var html = $"""
+                        <h1>Portal Curoc</h1>
+                        <p>Por favor, confirme su correo electrónico haciendo clic en el siguiente enlace:</p>
+                        <a href='{host}/confirm-email?token={token}'>Confirmar correo electrónico</a>
+                    """;
 
-        await emailSender.SendEmailAsync(to, subject, html);
+        await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
     }
 
     public async Task SendResetPasswordInstructionsAsync(
@@ -30,14 +31,15 @@ public class UserNotificationService(
         CancellationToken cancellationToken = default
     )
     {
-        var subject = "Portal Curoc - Restablezca su contraseña";
+        const string subject = "Portal Curoc - Restablezca su contraseña";
         var host = configuration["Frontend:Url"]!;
-        var html = $@"
-            <h1>Portal Curoc</h1>
-            <p>Por favor, restablezca su contraseña haciendo clic en el siguiente enlace:</p>
-            <a href='{host}/reset-password?token={token}'>Restablecer contraseña</a>";
+        var html = $"""
+                        <h1>Portal Curoc</h1>
+                        <p>Por favor, restablezca su contraseña haciendo clic en el siguiente enlace:</p>
+                        <a href='{host}/reset-password?token={token}'>Restablecer contraseña</a>
+                    """;
 
-        await emailSender.SendEmailAsync(to, subject, html);
+        await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
     }
     
     public async Task SendPasswordResetConfirmationAsync(
@@ -45,18 +47,26 @@ public class UserNotificationService(
         CancellationToken cancellationToken = default
     )
     {
-        var subject = "Portal Curoc - Su contraseña ha sido restablecida";
-        var host = configuration["Frontend:Url"]!;
-        var html = $@"
-            <h1>Portal Curoc</h1>
-            <p>Su contraseña ha sido restablecida exitosamente. Si usted no realizó esta solicitud, por favor contacte con nuestro soporte.</p>";
+        const string subject = "Portal Curoc - Su contraseña ha sido restablecida";
+        const string html = """
+                                <h1>Portal Curoc</h1>
+                                <p>Su contraseña ha sido restablecida exitosamente. Si usted no realizó esta solicitud, por favor contacte con nuestro soporte.</p>
+                            """;
 
-        await emailSender.SendEmailAsync(to, subject, html);
+        await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
     }
-    
-    
-    public async Task SendWelcomeEmailAsync(string email, CancellationToken cancellationToken = default)
+
+    public async Task SendWelcomeEmailAsync(string to, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        const string subject = "Bienvenido a Portal Curoc";
+        var host = configuration["Frontend:Url"]!;
+        var html = $"""
+                        <h1>Bienvenido a Portal CUROC</h1>
+                        <p>Gracias por registrarte. Estamos encantados de tenerte con nosotros.</p>
+                        <p>Explora nuestras funciones y servicios en el siguiente enlace:</p>
+                        <a href='{host}'>Ir a Portal CUROC</a>
+                    """;
+
+        await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
     }
 }
