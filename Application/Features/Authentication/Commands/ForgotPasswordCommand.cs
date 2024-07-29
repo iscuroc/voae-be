@@ -3,7 +3,7 @@ using Shared;
 
 namespace Application.Features.Authentication.Commands
 {
-    public record PasswordResetCommand(
+    public record ForgotPasswordCommand(
         string Email
     ) : ICommand<Result>;
 }

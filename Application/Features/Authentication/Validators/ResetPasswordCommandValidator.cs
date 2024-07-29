@@ -3,15 +3,10 @@ using FluentValidation;
 
 namespace Application.Features.Authentication.Validators
 {
-    public class ResetPasswordCommandValidator : AbstractValidator<PasswordResetTwoStepCommand>
+    public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordCommand>
     {
         public ResetPasswordCommandValidator()
         {
-            RuleFor(x => x.Email)
-                .NotEmpty()
-                .EmailAddress()
-                .WithMessage("A valid email address is required.");
-
             RuleFor(x => x.Password)
                 .NotEmpty()
                 .MinimumLength(8)

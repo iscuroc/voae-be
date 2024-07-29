@@ -3,15 +3,14 @@ using FluentValidation;
 
 namespace Application.Features.Authentication.Validators
 {
-    public class PasswordResetCommandValidator : AbstractValidator<PasswordResetCommand>
+    public class ForgotPasswordCommandValidator : AbstractValidator<ForgotPasswordCommand>
     {
-        public PasswordResetCommandValidator()
+        public ForgotPasswordCommandValidator()
         {
             RuleFor(x => x.Email)
                 .NotEmpty()
                 .EmailAddress()
                 .WithMessage("A valid email address is required.");
-
         }
     }
 }
