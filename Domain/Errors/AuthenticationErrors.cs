@@ -34,4 +34,14 @@ public static class AuthenticationErrors
         "Authentication.AccountNumberInUse",
         "Account number is already in use"
     );
+    
+    public static Error NotFound => Error.NotFound(
+        "Authentication.NotFound",
+        "Account not found"
+    );
+    
+    public static Error PasswordDontMatch => Error.Conflict(
+        "Authentication.PasswordDontMatch",
+        "Password dont match"
+    );
 }

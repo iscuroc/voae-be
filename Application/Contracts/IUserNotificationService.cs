@@ -8,7 +8,20 @@ public interface IUserNotificationService
         CancellationToken cancellationToken = default
     );
     
-    Task SendResetPasswordInstructionsAsync(CancellationToken cancellationToken = default);
+    Task SendResetPasswordInstructionsAsync(
+        string to, 
+        string token, 
+        CancellationToken cancellationToken = default
+    );
+    
+    Task SendWelcomeEmailAsync(
+        string to,
+        CancellationToken cancellationToken = default
+    );
 
-    Task SendWelcomeEmailAsync(string to, CancellationToken cancellationToken = default);
+    Task SendPasswordResetConfirmationAsync(
+        string to,
+        CancellationToken cancellationToken = default
+    );
+    
 }
