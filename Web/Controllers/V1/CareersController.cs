@@ -18,4 +18,14 @@ public class CareersController(ISender sender) : BaseController
         
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
+
+    [HttpGet("{id}/students")]
+    [ProducesResponseType<List<StudentResponse>>(StatusCodes.Status200OK)]
+    public async Task<IResult> GetStudentsByIdAsync(int id, [FromQuery] string? query, CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(new GetStudentsByIdQuery(id, query), cancellationToken);
+
+        return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
+    }
+
 }
