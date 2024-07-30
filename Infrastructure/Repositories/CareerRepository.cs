@@ -23,4 +23,13 @@ public class CareerRepository(ApplicationDbContext context) : ICareerRepository
     {
         return await context.Careers.AnyAsync(x => x.Id == id, cancellationToken);
     }
+    
+    public async Task<IEnumerable<User>> GetTeachersByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await context.Users
+            .Include(c => c.Id)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }  
+    
 }
