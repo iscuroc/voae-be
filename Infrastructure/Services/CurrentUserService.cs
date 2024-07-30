@@ -4,7 +4,6 @@ using Domain.Contracts;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.Http;
-using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
 
 namespace Infrastructure.Services;
 
