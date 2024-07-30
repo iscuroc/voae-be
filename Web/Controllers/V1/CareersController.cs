@@ -21,7 +21,7 @@ public class CareersController(ISender sender) : BaseController
 
     [HttpGet("{id}/students")]
     [ProducesResponseType<List<StudentResponse>>(StatusCodes.Status200OK)]
-    public async Task<IResult> GetStudentsByIdAsync(int id, [FromQuery] string? query, CancellationToken cancellationToken)
+    public async Task<IResult> GetAsync(int id, [FromQuery] string? query, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetStudentsByIdQuery(id, query), cancellationToken);
 

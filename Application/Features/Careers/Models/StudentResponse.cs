@@ -2,9 +2,9 @@
 
 public record struct StudentResponse(
     int Id,
-    string? Names,
-    string? Lastnames,
-    string? Email,
-    long? AccountNumber,
+    string Names,
+    string Lastnames,
+    string Email,
+    long AccountNumber,
     int CareerId
 );

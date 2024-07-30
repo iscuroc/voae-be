@@ -30,20 +30,20 @@ public class CareerRepository(ApplicationDbContext context) : ICareerRepository
         if (query.IsNullOrEmpty()) 
         {
             return await context.Users
-            .Where(s => s.CareerId == id)
+            .Where(s => s.CareerId == id && s.EmailConfirmedAt.HasValue)
             .Take(15)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
         }
 
         var queryStudentsNames = context.Users
-        .Where(s => s.CareerId == id && s.Names.Contains(query));
+        .Where(s => s.CareerId == id && s.Names.Contains(query) && s.EmailConfirmedAt.HasValue);
 
         var queryStudentsLastNames = context.Users
-        .Where(s => s.CareerId == id && s.Lastnames.Contains(query));
+        .Where(s => s.CareerId == id && s.Lastnames.Contains(query) && s.EmailConfirmedAt.HasValue);
 
         return await context.Users
-            .Where(s => s.CareerId == id && s.Email.Contains(query))
+            .Where(s => s.CareerId == id && s.Email.Contains(query) && s.EmailConfirmedAt.HasValue)
             .Union(queryStudentsNames)
             .Union(queryStudentsLastNames)
             .AsNoTracking()
