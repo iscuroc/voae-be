@@ -53,6 +53,7 @@ public class GetAllActivitiesQueryHandler(IActivityRepository activityRepository
             activities.CurrentPage,
             activities.PageSize
         );
-        return Result.Success(nactivities);
+        
+        return nactivities;
     }
 }
