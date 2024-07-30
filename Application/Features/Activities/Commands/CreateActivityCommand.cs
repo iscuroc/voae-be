@@ -19,7 +19,6 @@ public record CreateActivityCommand(
     int TotalSpots,
     string Location,
     IList<string> MainActivities
-    
 ) : ICommand<Result>;
 
 public record ActivityScope(

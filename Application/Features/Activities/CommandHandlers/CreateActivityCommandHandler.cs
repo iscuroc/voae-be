@@ -12,7 +12,8 @@ namespace Application.Features.Activities.CommandHandlers;
 
 public record CreateActivityCommandHandler(
     IActivityRepository ActivityRepository,
-    IUserNotificationService UserNotificationService,
+    // IUserNotificationService UserNotificationService,
+    ICurrentUserService CurrentUserService,
     ICareerRepository CareerRepository,
     IUserRepository UserRepository
 ) : ICommandHandler<CreateActivityCommand, Result>
@@ -37,7 +38,7 @@ public record CreateActivityCommandHandler(
         {
             var career = await CareerRepository.GetByIdAsync(careerId, cancellationToken);
             if (career is null) return Result.Failure(ActivityErrors.AvailableCareerNotFound(careerId));
-            availableCareers.Add(career);
+            availableCareers.Add(career);   
         }
 
         //create scopes
@@ -47,7 +48,10 @@ public record CreateActivityCommandHandler(
             HourAmount = scope.Hours
         }).ToList();
 
-
+        ActivityStatus status =
+            await CurrentUserService.GetCurrentUserRole() == Role.Voae
+                ? ActivityStatus.RequestApproved
+                : ActivityStatus.RequestPending;
         var activity = new Activity
         {
             Name = request.Name,
@@ -60,14 +64,13 @@ public record CreateActivityCommandHandler(
             TeacherId = request.CareerTeacherId,
             StudentId = request.CareerStudentId,
             Location = request.Location,
-            ActivityStatus = ActivityStatus.RequestPending,
+            ActivityStatus = status,
             MainActivities = string.Join("|", request.MainActivities),
             Scopes = scopes,
             ForeingCareers = availableCareers
         };
 
         await ActivityRepository.AddAsync(activity, cancellationToken);
-
 
         return Result.Success();
     }

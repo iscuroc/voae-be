@@ -5,7 +5,7 @@ namespace Web.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-//[Authorize]
+[Authorize]
 [Produces("application/json")]
 [Consumes("application/json")]
 public class BaseController : ControllerBase;
