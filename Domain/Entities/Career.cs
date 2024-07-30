@@ -9,4 +9,6 @@ public class Career : EntityBase
     public int FacultyId { get; set; }
     public Faculty Faculty { get; set; } = null!;
     public IEnumerable<User> Users { get; set; } = null!;
+    public IEnumerable<Activity> ForaingActivities { get; set; } = null!;
+    public IEnumerable<Activity> MainActivities { get; set; } = null!;
 }
