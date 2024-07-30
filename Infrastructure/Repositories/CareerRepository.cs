@@ -27,7 +27,7 @@ public class CareerRepository(ApplicationDbContext context) : ICareerRepository
 
     public async Task<IEnumerable<User>> GetStudentsByIdAsync(int id, string query = "", CancellationToken cancellationToken = default)
     {
-        if (query.IsNullOrEmpty()) 
+        if (string.IsNullOrWhiteSpace(query)) 
         {
             return await context.Users
             .Where(s => s.CareerId == id && s.EmailConfirmedAt.HasValue)
