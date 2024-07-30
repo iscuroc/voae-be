@@ -29,6 +29,11 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         return user;
     }
 
+    public async Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await context.Users.FindAsync([id], cancellationToken);
+    }
+
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
     { 
         return await context.Users.AnyAsync(u => u.Email == email, cancellationToken);
