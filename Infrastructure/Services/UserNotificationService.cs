@@ -69,4 +69,17 @@ public class UserNotificationService(
 
         await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
     }
+    
+    public async Task SendNewActivityEmailAsync(string to, int activityLink, CancellationToken cancellationToken = default)
+    {
+        const string subject = "Nueva Actividad en Portal CUROC";
+        var host = configuration["Frontend:Url"+ activityLink]!;
+        var html = $"""
+                        <h1>Se ha creado una nueva actividad</h1>
+                        <p>Hay una nueva actividad disponible para ti. Puedes verla en el siguiente enlace:</p>
+                        <a href='{host}'>Ver Actividad</a>
+                    """;
+
+        await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
+    }
 }

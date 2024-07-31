@@ -24,4 +24,9 @@ public interface IUserNotificationService
         CancellationToken cancellationToken = default
     );
     
+    Task SendNewActivityEmailAsync(
+        string to, int activityLink, 
+        CancellationToken cancellationToken = default
+    );
+    
 }

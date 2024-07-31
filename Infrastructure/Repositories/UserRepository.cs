@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
@@ -57,5 +58,10 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         var user = await context.Users
             .FirstOrDefaultAsync(u => u.PasswordResetToken == resetPasswordToken, cancellationToken);
         return user;
+    }
+    
+    public async Task<IEnumerable<User>> GetUsersByRoleAsync(Role role, CancellationToken cancellationToken = default)
+    {
+        return await context.Users.Where(u => u.Role == role).ToListAsync(cancellationToken);
     }
 }
