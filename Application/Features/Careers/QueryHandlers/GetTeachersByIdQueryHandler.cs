@@ -14,7 +14,7 @@ public record GetTeachersByIdQueryHandler(
     public async ValueTask<Result<List<TeacherResponse>>> Handle(GetTeachersByIdQuery query,
         CancellationToken cancellationToken)
     {
-        var users = await CareerRepository.GetTeachersByIdAsync(query.CareerId,cancellationToken);
+        var users = await CareerRepository.GetAsync(query.CareerId,cancellationToken);
 
         return users.ToResponse();
     }

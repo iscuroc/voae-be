@@ -24,10 +24,10 @@ public class CareerRepository(ApplicationDbContext context) : ICareerRepository
         return await context.Careers.AnyAsync(x => x.Id == id, cancellationToken);
     }
     
-    public async Task<IEnumerable<User>> GetTeachersByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<User>> GetAsync(int id, CancellationToken cancellationToken = default)
     {
         return await context.Users
-            .Include(c => c.Id)
+            .Where(u => u.CareerId == id)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }  

@@ -8,7 +8,6 @@ public interface ICareerRepository
     Task<Career?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default);
     
-    Task<IEnumerable<User>> GetTeachersByIdAsync(int id, CancellationToken cancellationToken = default);
-    
+    Task<IEnumerable<User>> GetAsync(int id, CancellationToken cancellationToken = default);
     
 }

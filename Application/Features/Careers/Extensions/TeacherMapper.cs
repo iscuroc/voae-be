@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Application.Features.Careers.Models;
 using Domain.Entities;
+using Domain.Enums;
 
 
 namespace Application.Features.Careers.Extensions
@@ -12,14 +13,17 @@ namespace Application.Features.Careers.Extensions
             return new TeacherResponse
             {
                 Id = user.Id,
-                Names = user.Names,
-                CareerId = (int)user.CareerId 
+                Names = user.Names ,
+                LastNames = user.Lastnames
             };
         }
         
         public static List<TeacherResponse> ToResponse(this IEnumerable<User> users)
         {
-            return users.Select(user => user.ToResponse()).ToList();
+            return users
+                .Where(user => user.Role == Role.Teacher)
+                .Select(user => user.ToResponse())
+                .ToList();
         }
     }
 }
