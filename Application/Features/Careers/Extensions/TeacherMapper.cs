@@ -14,7 +14,8 @@ namespace Application.Features.Careers.Extensions
             {
                 Id = user.Id,
                 Names = user.Names ,
-                LastNames = user.Lastnames
+                LastNames = user.Lastnames,
+                CareerId = (int)user.CareerId
             };
         }
         

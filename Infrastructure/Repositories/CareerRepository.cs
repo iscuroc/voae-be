@@ -28,9 +28,10 @@ public class CareerRepository(ApplicationDbContext context) : ICareerRepository
     public async Task<IEnumerable<User>> GetAsync(int id, CancellationToken cancellationToken = default)
     {
         return await context.Users
-            .Where(u => u.CareerId == id && u.Role == Role.Teacher)
+            .Where(u => u.CareerId == id && u.Role == Role.Student && u.EmailConfirmedAt != null)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
-    } 
+    }
+
     
 }
