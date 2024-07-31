@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
@@ -27,9 +28,9 @@ public class CareerRepository(ApplicationDbContext context) : ICareerRepository
     public async Task<IEnumerable<User>> GetAsync(int id, CancellationToken cancellationToken = default)
     {
         return await context.Users
-            .Where(u => u.CareerId == id)
+            .Where(u => u.CareerId == id && u.Role == Role.Teacher)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
-    }  
+    } 
     
 }

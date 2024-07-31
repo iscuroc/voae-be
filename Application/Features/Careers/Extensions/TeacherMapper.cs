@@ -21,7 +21,6 @@ namespace Application.Features.Careers.Extensions
         public static List<TeacherResponse> ToResponse(this IEnumerable<User> users)
         {
             return users
-                .Where(user => user.Role == Role.Teacher)
                 .Select(user => user.ToResponse())
                 .ToList();
         }
