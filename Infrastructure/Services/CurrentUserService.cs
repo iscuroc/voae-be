@@ -12,7 +12,7 @@ public class CurrentUserService(
     IUserRepository userRepository
 ) : ICurrentUserService
 {
-    public async Task<User> GetCurrentUser(CancellationToken cancellationToken = default)
+    public async Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default)
     {
         var userId = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var user = await userRepository.GetByIdAsync(int.Parse(userId!), cancellationToken);
@@ -20,9 +20,9 @@ public class CurrentUserService(
         return user!;
     }
 
-    public async Task<Role> GetCurrentUserRole(CancellationToken cancellationToken = default)
+    public async Task<Role> GetCurrentRoleAsync(CancellationToken cancellationToken = default)
     {
-        var userId = httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userId = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var user = await userRepository.GetByIdAsync(int.Parse(userId!), cancellationToken);
         
         return user!.Role;

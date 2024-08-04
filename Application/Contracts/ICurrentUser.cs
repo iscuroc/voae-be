@@ -5,6 +5,6 @@ namespace Application.Contracts;
 
 public interface ICurrentUserService
 {
-    Task<User> GetCurrentUser(CancellationToken cancellationToken = default);
-    Task<Role> GetCurrentUserRole(CancellationToken cancellationToken = default);
+    Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default);
+    Task<Role> GetCurrentRoleAsync(CancellationToken cancellationToken = default);
 }

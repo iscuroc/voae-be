@@ -72,7 +72,7 @@ public record CreateActivityCommandHandler(
 
         }
         
-        var currentUser = await CurrentUserService.GetCurrentUser(cancellationToken);
+        var currentUser = await CurrentUserService.GetCurrentUserAsync(cancellationToken);
         
         var status = currentUser.Role switch
         {
