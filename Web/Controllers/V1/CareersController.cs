@@ -7,9 +7,9 @@ using Web.Extensions;
 
 namespace Web.Controllers.V1;
 
-[AllowAnonymous]
 public class CareersController(ISender sender) : BaseController
 {
+    [AllowAnonymous]
     [HttpGet]
     [ProducesResponseType<List<CareerResponse>>(StatusCodes.Status200OK)]
     public async Task<IResult> GetAsync(CancellationToken cancellationToken)
