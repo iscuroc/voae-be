@@ -9,7 +9,7 @@ namespace Application.Features.Authentication.CommandHandlers
 {
     public class ForgotPasswordCommandHandler(
         IUserRepository userRepository,
-        IUserNotificationService userNotificationService
+        IUserMailer userMailer
     )
         : ICommandHandler<ForgotPasswordCommand, Result>
     {
@@ -26,7 +26,7 @@ namespace Application.Features.Authentication.CommandHandlers
             
             await userRepository.UpdateAsync(user, cancellationToken);
 
-            await userNotificationService.SendResetPasswordInstructionsAsync(user.Email, token, cancellationToken);
+            await userMailer.SendForgotPasswordInstructionsAsync(user.Email, token, cancellationToken);
 
             return Result.Success();
         }

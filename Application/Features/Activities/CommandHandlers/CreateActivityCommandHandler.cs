@@ -13,7 +13,7 @@ namespace Application.Features.Activities.CommandHandlers;
 
 public record CreateActivityCommandHandler(
     IActivityRepository ActivityRepository,
-    IUserNotificationService UserNotificationService,
+    IUserMailer UserMailer,
     ICurrentUserService CurrentUserService,
     ICareerRepository CareerRepository,
     IUserRepository UserRepository,
@@ -84,13 +84,16 @@ public record CreateActivityCommandHandler(
 
         await ActivityRepository.AddAsync(activity, cancellationToken);
         
-        var voaeUsers = await UserRepository.GetUsersByRoleAsync(Role.Voae, cancellationToken);
-        var activityLink = activity.Id;
+        var voaeUsers = await UserRepository.GetByRoleAsync(Role.Voae, cancellationToken);
 
-        foreach (var user in voaeUsers)
-        {
-            await UserNotificationService.SendNewActivityEmailAsync(user.Email, activityLink, cancellationToken);
-        }
+        var tasks = voaeUsers.Select(user => 
+            UserMailer.SendActivityRequestedAsync(
+            user.Email, 
+            activity.Slug, 
+            cancellationToken
+        )).ToList();
+        
+        await Task.WhenAll(tasks);
 
         return Result.Success();
     }

@@ -9,7 +9,7 @@ namespace Application.Features.Authentication.CommandHandlers
 {
     public class ResetPasswordCommandHandler(
         IUserRepository userRepository,
-        IUserNotificationService userNotificationService,
+        IUserMailer userMailer,
         IPasswordHasher passwordHasher
     )
         : ICommandHandler<ResetPasswordCommand, Result>
@@ -31,7 +31,7 @@ namespace Application.Features.Authentication.CommandHandlers
 
             await userRepository.UpdateAsync(user, cancellationToken);
 
-            await userNotificationService.SendPasswordResetConfirmationAsync(user.Email, cancellationToken);
+            await userMailer.SendResetPasswordConfirmationAsync(user.Email, cancellationToken);
 
             return Result.Success();
         }
