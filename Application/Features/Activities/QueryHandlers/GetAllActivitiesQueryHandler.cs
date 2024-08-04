@@ -1,4 +1,4 @@
-﻿using Application.Features.Activities.Extensions;
+﻿using Application.Features.Activities.Mappers;
 using Application.Features.Activities.Models;
 using Application.Features.Activities.Queries;
 using Application.Shared;

@@ -1,4 +1,4 @@
-﻿using Application.Features.Careers.Extensions;
+﻿using Application.Features.Careers.Mappers;
 using Application.Features.Careers.Models;
 using Application.Features.Careers.Queries;
 using Domain.Contracts;
