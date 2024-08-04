@@ -1,59 +1,55 @@
-﻿using Application.Features.Activities.Models;
+﻿using Application.Features.Activities.Extensions;
+using Application.Features.Activities.Models;
 using Application.Features.Activities.Queries;
-using Application.Features.Authentication.Models;
+using Application.Shared;
 using Domain.Contracts;
 using Mediator;
 using Shared;
-using Shared.Pagination;
 
 namespace Application.Features.Activities.QueryHandlers;
 
-public class GetAllActivitiesQueryHandler(IActivityRepository activityRepository)
-    : IQueryHandler<GetAllActivitiesQuery, Result<PagedList<ActivityResponse>>>
+public class GetAllActivitiesQueryHandler(
+    IActivityRepository activityRepository
+) : IQueryHandler<GetAllActivitiesQuery, Result<PaginatedList<ActivityResponse>>>
 {
-    public async ValueTask<Result<PagedList<ActivityResponse>>> Handle(GetAllActivitiesQuery query,
+    public async ValueTask<Result<PaginatedList<ActivityResponse>>> Handle(GetAllActivitiesQuery query,
         CancellationToken cancellationToken)
     {
-        var activities = await activityRepository.GetAllAsync(
-            query.Pagination,
-            query.ActivityFiltersRequest.Name,
-            query.ActivityFiltersRequest.CareerId,
-            query.ActivityFiltersRequest.Scope,
-            query.ActivityFiltersRequest.StartDate,
-            query.ActivityFiltersRequest.EndDate,
-            query.ActivityFiltersRequest.Status,
+        var filters = new ActivityFilter
+        {
+            PageNumber = query.PageNumber,
+            PageSize = query.PageSize,
+            Name = query.Name,
+            OrganizerCareerId = query.OrganizerCareerId,
+            OrganizerOrganizationId = query.OrganizerOrganizationId,
+            ForeingCareerId = query.ForeingCareerId,
+            Scope = query.Scope,
+            StartDateMin = query.StartDateMin,
+            StartDateMax = query.StartDateMax,
+            EndDateMin = query.EndDateMin,
+            EndDateMax = query.EndDateMax,
+            Status = query.Status
+        };
+        
+        var activities = await activityRepository.GetPagedAsync(
+            filters,
+            cancellationToken
+        );
+        
+        var totalActivities = await activityRepository.CountAsync(
+            filters,
             cancellationToken
         );
 
-        var activitiesResponse = activities.Select(a => new ActivityResponse(
-            a.Id,
-            a.Name,
-            a.Description,
-            a.Location,
-            a.MainActivities,
-            a.Objectives,
-            a.MainCareer,
-            a.StartDate,
-            a.EndDate,
-            a.TotalSpots,
-            a.BannerLink,
-            a.Scopes.Select(s => new ActivityScopeResponse(s.HourAmount, s.Scope)).ToList(),
-            a.ForeingCareers.Select(c => new CareerResponse(c.Id, c.Name)).ToList(),
-            a.TeacherId,
-            new UserResponse(a.Teacher.Id, a.Teacher.Names!, a.Teacher.Email, a.Teacher.Role),
-            new UserResponse(a.Student.Id, a.Student.Names!, a.Student.Email, a.Student.Role),
-            a.ActivityStatus,
-            a.RequestedAt,
-            a.ReviewDate
-        ));
+        var activitiesResponse = activities.ToResponse();
 
-        var nactivities = new PagedList<ActivityResponse>(
+        var paginatedList = new PaginatedList<ActivityResponse>(
             activitiesResponse,
-            activities.TotalCount,
-            activities.CurrentPage,
-            activities.PageSize
+            totalActivities,
+            query.PageNumber,
+            query.PageSize
         );
         
-        return nactivities;
+        return paginatedList;
     }
 }

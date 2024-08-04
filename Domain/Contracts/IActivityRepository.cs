@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
-using Shared.Pagination;
+using Shared;
 
 namespace Domain.Contracts;
 
@@ -9,27 +9,28 @@ public interface IActivityRepository
     Task AddAsync(Activity activity, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Activity>> GetPagedAsync(
-        int pageNumber,
-        int pageSize,
-        string name,
-        int careerId,
-        ActivityScopes? scope,
-        DateTime startDate,
-        DateTime endDate,
-        ActivityStatus status,
+        ActivityFilter filters,
         CancellationToken cancellationToken = default
     );
 
     Task<long> CountAsync(
-        int pageNumber,
-        int pageSize,
-        string name,
-        int careerId,
-        ActivityScopes? scope,
-        DateTime startDate,
-        DateTime endDate,
-        ActivityStatus status,
+        ActivityFilter filters,
         CancellationToken cancellationToken = default
     );
     
+    Task<bool> ExistsBySlugAsync(string slug, CancellationToken cancellationToken = default);
+}
+
+public record ActivityFilter : PaginationBase
+{
+    public required string? Name { get; set; }
+    public required int? OrganizerCareerId { get; set; }
+    public required int? OrganizerOrganizationId { get; set; }
+    public required int? ForeingCareerId { get; set; }
+    public required ActivityScopes? Scope { get; set; }
+    public required DateTime? StartDateMin { get; set; }
+    public required DateTime? StartDateMax { get; set; }
+    public required DateTime? EndDateMin { get; set; }
+    public required DateTime? EndDateMax { get; set; }
+    public required ActivityStatus? Status { get; set; }
 }

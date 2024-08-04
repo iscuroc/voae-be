@@ -5,6 +5,8 @@ namespace Domain.Entities;
 
 public class User : EntityBase
 {
+    private const string TeacherEmailDomain = "unah.edu.hn";
+    
     public string? Names { get; set; }
     public string? Lastnames { get; set; }
     public required string Email { get; set; }
@@ -22,6 +24,10 @@ public class User : EntityBase
     public Career? Career { get; set; }
 
     public Role Role { get; set; }
+    public IEnumerable<Activity> RequestedActivities { get; set; } = null!;
+    public IEnumerable<Activity> SupervisedActivities { get; set; } = null!;
+    public IEnumerable<Activity> CoordinatedActivities { get; set; } = null!;
+    public IEnumerable<Activity> ReviewedActivities { get; set; } = null!;
 
     public void SetRoleByEmail()
     {
@@ -51,6 +57,6 @@ public class User : EntityBase
 
     private Role GetRoleByEmail()
     {
-        return Email.EndsWith("unah.edu.hn") ? Role.Teacher : Role.Student;
+        return Email.EndsWith(TeacherEmailDomain) ? Role.Teacher : Role.Student;
     }
 }

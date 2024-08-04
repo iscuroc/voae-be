@@ -1,9 +1,20 @@
 ﻿using Application.Features.Activities.Models;
+using Application.Shared;
+using Domain.Enums;
 using Mediator;
 using Shared;
-using Shared.Pagination;
 
 namespace Application.Features.Activities.Queries;
 
-public record GetAllActivitiesQuery(PaginationOptions Pagination, ActivityFiltersRequest ActivityFiltersRequest)
-    : IQuery<Result<PagedList<ActivityResponse>>>;
+public record GetAllActivitiesQuery(
+    string? Name,
+    int? OrganizerCareerId,
+    int? OrganizerOrganizationId,
+    int? ForeingCareerId,
+    ActivityScopes? Scope,
+    DateTime? StartDateMin,
+    DateTime? StartDateMax,
+    DateTime? EndDateMin,
+    DateTime? EndDateMax,
+    ActivityStatus? Status
+) : PaginationBase, IQuery<Result<PaginatedList<ActivityResponse>>>;

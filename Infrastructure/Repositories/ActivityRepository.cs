@@ -1,9 +1,7 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
-using Domain.Enums;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Shared.Pagination;
 
 namespace Infrastructure.Repositories;
 
@@ -16,74 +14,44 @@ public class ActivityRepository(ApplicationDbContext context) : IActivityReposit
     }
 
     public async Task<IEnumerable<Activity>> GetPagedAsync(
-        int pageNumber,
-        int pageSize,
-        string name,
-        int careerId,
-        ActivityScopes? scope,
-        DateTime startDate,
-        DateTime endDate,
-        ActivityStatus status,
+        ActivityFilter filters,
         CancellationToken cancellationToken = default
     )
     {
-        var query = context.Activities.AsNoTracking();
-        var filteredQuery = CreateFilter(query, name, careerId, scope, startDate, endDate, status);
-
-        return dataPagedList = await filteredQuery
-            .OrderBy(a => a.Id)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
+        var query = context.Activities.AsQueryable();
+        
+        return await query
+            .Include(a => a.Supervisor)
+            .Include(a => a.Coordinator)
+            .Include(a => a.Organizers)
+            .ThenInclude(o => o.Organization)
+            .Include(a => a.Organizers)
+            .ThenInclude(o => o.Career)
+            .Include(a => a.ForeingCareers)
+            .Include(a => a.Scopes)
+            .Include(a => a.RequestedBy)
+            .Include(a => a.ReviewedBy)
+            .ApplyFilters(filters)
+            .OrderByDescending(a => a.CreatedAt)
+            .Page(filters.PageNumber, filters.PageSize)
             .ToListAsync(cancellationToken);
     }
 
     public async Task<long> CountAsync(
-        int pageNumber,
-        int pageSize,
-        string name,
-        int careerId,
-        ActivityScopes? scope,
-        DateTime startDate,
-        DateTime endDate,
-        ActivityStatus status,
+        ActivityFilter filters,
         CancellationToken cancellationToken = default
     )
     {
- 
-        var query = context.Activities.AsNoTracking();
-        var filteredQuery = CreateFilter(query, name, careerId, scope, startDate, endDate, status);
+        var query = context.Activities.AsQueryable();
 
-        return await filteredQuery.CountAsync(cancellationToken);
+        return await query
+            .ApplyFilters(filters)
+            .OrderByDescending(a => a.CreatedAt)
+            .CountAsync(cancellationToken);
     }
 
-    private void CreateFilter(IQueryable<Activity> query,
-        string name,
-        int careerId,
-        ActivityScopes? scope,
-        DateTime startDate,
-        DateTime endDate,
-        ActivityStatus status
-    )
+    public async Task<bool> ExistsBySlugAsync(string slug, CancellationToken cancellationToken = default)
     {
-        if (!string.IsNullOrWhiteSpace(name))
-            query = query.Where(a => a.Name.Contains(name));
-
-        if (careerId > 0)
-            query = query.Where(a => a.MainCareerId == careerId);
-
-        if (scope is not null)
-            query = query.Where(a => a.Scopes.Any(s => s.Scope == scope));
-
-        if (startDate != default)
-            query = query.Where(a => a.StartDate >= startDate);
-
-        if (endDate != default)
-            query = query.Where(a => a.EndDate <= endDate);
-
-        if (status != default)
-            query = query.Where(a => a.ActivityStatus == status);
-
-        return query;
+        return await context.Activities.AnyAsync(a => a.Slug == slug, cancellationToken);
     }
-
 }

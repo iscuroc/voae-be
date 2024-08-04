@@ -1,5 +1,4 @@
-namespace Shared.Pagination;
-
+﻿namespace Application.Shared;
 
 public class PaginatedList<T>(
     List<T> items,

@@ -5,9 +5,10 @@ namespace Infrastructure;
 
 public abstract class TablesRoot(DbContextOptions options) : DbContext(options)
 {
-    public required DbSet<User> Users { get; set; }
-    public required DbSet<Faculty> Faculties { get; set; }
-    public required DbSet<Career> Careers {get; set;}
-    public required DbSet<Activity> Activities { get; set; }
-    public required DbSet<ActivityScope> ActivityScopes { get; set; }
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Faculty> Faculties => Set<Faculty>();
+    public DbSet<Career> Careers => Set<Career>();
+    public DbSet<Activity> Activities => Set<Activity>();
+    public DbSet<ActivityScope> ActivityScopes => Set<ActivityScope>();
+    public DbSet<Organization> Organizations => Set<Organization>();
 }
