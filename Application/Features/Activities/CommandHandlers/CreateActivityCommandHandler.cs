@@ -69,7 +69,6 @@ public record CreateActivityCommandHandler(
             {
                 Organization = organization
             });
-
         }
         
         var currentUser = await CurrentUserService.GetCurrentUserAsync(cancellationToken);

@@ -45,8 +45,8 @@ public class ActivityRepository(ApplicationDbContext context) : IActivityReposit
         var query = context.Activities.AsQueryable();
 
         return await query
-            .ApplyFilters(filters)
             .OrderByDescending(a => a.CreatedAt)
+            .ApplyFilters(filters)
             .CountAsync(cancellationToken);
     }
 

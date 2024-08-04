@@ -9,9 +9,9 @@ namespace Application.Features.Careers.QueryHandlers;
 
 public record GetStudentsByIdQueryHandler(
     ICareerRepository CareerRepository
-) : IQueryHandler<GetStudentsByIdQuery, Result<List<StudentResponse>>>
+) : IQueryHandler<GetStudentsByIdQuery, Result<List<CareerUserResponse>>>
 {
-    public async ValueTask<Result<List<StudentResponse>>> Handle(GetStudentsByIdQuery query,
+    public async ValueTask<Result<List<CareerUserResponse>>> Handle(GetStudentsByIdQuery query,
         CancellationToken cancellationToken)
     {
         var users = await CareerRepository.GetStudentsByIdAsync(query.CareerId, query.query, cancellationToken);
