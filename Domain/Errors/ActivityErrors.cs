@@ -42,4 +42,9 @@ public static class ActivityErrors
         "Activity.InvalidCoordinatorRole",
         "The Coordinator must be a student"
     );
+
+    public static Error ActivitySlugNotFound => Error.NotFound(
+        "Activity.ActivitySlugNotFound",
+        "Activity with the provided slug was not found"
+    );
 }

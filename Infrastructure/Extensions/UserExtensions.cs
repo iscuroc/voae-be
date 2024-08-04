@@ -11,12 +11,14 @@ public static class UserExtensions
     )
     {
         if (string.IsNullOrWhiteSpace(queryFilter)) return query;
+
+        var lookupFilter = queryFilter.ToLower();
         
         query = query.Where(u =>
-            (u.Names != null && u.Names.Contains(queryFilter)) ||
-            (u.Lastnames != null && u.Lastnames.Contains(queryFilter)) ||
-            u.Email.Contains(queryFilter) ||
-            u.AccountNumber != null && u.AccountNumber.ToString()!.Contains(queryFilter)
+            (u.Names != null && u.Names.ToLower().Contains(lookupFilter)) ||
+            (u.Lastnames != null && u.Lastnames.ToLower().Contains(lookupFilter)) ||
+            u.Email.ToLower().Contains(lookupFilter) ||
+            u.AccountNumber != null && u.AccountNumber.ToString()!.Contains(lookupFilter)
         );
         
         return query;

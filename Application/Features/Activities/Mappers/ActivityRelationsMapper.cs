@@ -9,7 +9,7 @@ public static class ActivityRelationsMapper
     {
         return new ActivityScopeResponse(
             Id: activityScope.Id,
-            HourAmount: activityScope.Hours,
+            Hours: activityScope.Hours,
             Scope: activityScope.Scope
         );
     }
@@ -37,7 +37,7 @@ public static class ActivityRelationsMapper
         return new ActivityUserResponse(
             Id: user.Id,
             Names: user.Names!,
-            LastNames: user.Lastnames!,
+            Lastnames: user.Lastnames!,
             Role: user.Role
         );
     }
