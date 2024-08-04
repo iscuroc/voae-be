@@ -19,11 +19,11 @@ public record LoginCommandHandler(
         var user = await UserRepository.GetByEmailAsync(request.Email, cancellationToken);
         if (user is null) return Result.Failure<TokenResponse>(AuthenticationErrors.InvalidCredentials);
         
-        var isPasswordValid = PasswordHasher.VerifyPassword(request.Password, user.Password);
+        var isPasswordValid = PasswordHasher.VerifyPassword(request.Password, user.Password!);
         if (!isPasswordValid) return Result.Failure<TokenResponse>(AuthenticationErrors.InvalidCredentials);
         
-        var newAccessToken = Jwt.GenerateToken(user.Id, user.Email);
+        var accessToken = Jwt.GenerateToken(user.Id, user.Email);
 
-        return new TokenResponse(user.Email, user.Role, newAccessToken);
+        return new TokenResponse(user.Email, user.Role, accessToken);
     }
 }

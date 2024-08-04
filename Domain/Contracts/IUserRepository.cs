@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 
 namespace Domain.Contracts;
 
@@ -12,4 +13,5 @@ public interface IUserRepository
     Task<bool> AccoutNumberExistsAsync(long accountNumber, CancellationToken cancellationToken = default);
     Task<User?> GetByConfirmationTokenAsync(string confirmationToken, CancellationToken cancellationToken = default);
     Task<User?> GetByResetPasswordTokenAsync(string resetPasswordToken, CancellationToken cancellationToken = default);
+    Task<IEnumerable<User>> GetByRoleAsync(Role role, CancellationToken cancellationToken = default);
 }

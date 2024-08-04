@@ -28,9 +28,9 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
             .IsUnique()
             .HasFilter("\"EmailConfirmationToken\" IS NOT NULL");
         
-        builder.HasIndex(x => x.PasswordResetToken)
+        builder.HasIndex(x => x.ResetPasswordToken)
             .IsUnique() 
-            .HasFilter("\"PasswordResetToken\" IS NOT NULL");
+            .HasFilter("\"ResetPasswordToken\" IS NOT NULL");
         
         builder.HasOne(x => x.Career)
             .WithMany(c => c.Users)

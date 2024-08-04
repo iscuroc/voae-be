@@ -1,76 +1,99 @@
 ﻿using Application.Contracts;
 using Application.Features.Activities.Commands;
+using Application.Features.Activities.Extensions;
+using Application.Shared;
 using Domain.Contracts;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Errors;
 using Mediator;
 using Shared;
-using ActivityScope = Domain.Entities.ActivityScope;
 
 namespace Application.Features.Activities.CommandHandlers;
 
 public record CreateActivityCommandHandler(
     IActivityRepository ActivityRepository,
-    // IUserNotificationService UserNotificationService,
+    IUserMailer UserMailer,
     ICurrentUserService CurrentUserService,
     ICareerRepository CareerRepository,
-    IUserRepository UserRepository
+    IUserRepository UserRepository,
+    IOrganizationRepository OrganizationRepository
 ) : ICommandHandler<CreateActivityCommand, Result>
 {
     public async ValueTask<Result> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
     {
-        //TODO: si es voae poner la actividad en estado probada.
-        var teacher = await UserRepository.GetByIdAsync(request.CareerTeacherId, cancellationToken);
-        if (teacher is null) return Result.Failure(ActivityErrors.TeacherNotFound);
-        if (teacher.Role is not Role.Teacher) return Result.Failure(ActivityErrors.InvalidTeacherRole);
+        var activitySlugExists = await ActivityRepository.ExistsBySlugAsync(request.Name.Slugify(), cancellationToken);
+        if (activitySlugExists) return Result.Failure(ActivityErrors.ActivityNameAlreadyExists(request.Name));
+        
+        var supervisor = await UserRepository.GetByIdAsync(request.SupervisorId, cancellationToken);
+        if (supervisor is null) return Result.Failure(ActivityErrors.SupervisorNotFound);
+        if (supervisor.Role is not Role.Teacher) return Result.Failure(ActivityErrors.InvalidSupervisorRole);
 
-        var student = await UserRepository.GetByIdAsync(request.CareerStudentId, cancellationToken);
-        if (student is null) return Result.Failure(ActivityErrors.StudentNotFound);
-        if (student.Role is not Role.Student) return Result.Failure(ActivityErrors.InvalidStudentRole);
-
-        var careerExist = await CareerRepository.ExistsAsync(request.MainCareerId, cancellationToken);
-        if (!careerExist) return Result.Failure(ActivityErrors.CareerNotFound);
-
-        List<Career> availableCareers = [];
-
-        foreach (var careerId in request.AvailableCareers)
+        var coordinator = await UserRepository.GetByIdAsync(request.CoordinatorId, cancellationToken);
+        if (coordinator is null) return Result.Failure(ActivityErrors.CoordinatorNotFound);
+        if (coordinator.Role is not Role.Student) return Result.Failure(ActivityErrors.InvalidCoordinatorRole);
+        
+        List<Career> foreignCareers = [];
+        foreach (var careerId in request.ForeignCareersIds)
         {
             var career = await CareerRepository.GetByIdAsync(careerId, cancellationToken);
-            if (career is null) return Result.Failure(ActivityErrors.AvailableCareerNotFound(careerId));
-            availableCareers.Add(career);   
+            if (career is null) return Result.Failure(ActivityErrors.ForeignCareerNotFound(careerId));
+            foreignCareers.Add(career);
         }
 
-        //create scopes
-        var scopes = request.Scopes.Select(scope => new ActivityScope
+        List<ActivityOrganizer> organizers = [];
+        foreach (var organizer in request.Organizers)
         {
-            Scope = scope.Scope,
-            HourAmount = scope.Hours
-        }).ToList();
+            if (organizer is {Type: OrganizerType.Career, CareerId: not null})
+            {
+               var career = await CareerRepository.GetByIdAsync(organizer.CareerId.Value, cancellationToken);
 
-        ActivityStatus status =
-            await CurrentUserService.GetCurrentUserRole() == Role.Voae
-                ? ActivityStatus.RequestApproved
-                : ActivityStatus.RequestPending;
-        var activity = new Activity
+               if (career is null) return Result.Failure(ActivityErrors.CareerOrganizerNotFound(organizer.CareerId.Value));
+               
+               organizers.Add(new ActivityOrganizer
+               {
+                   Career = career
+               });
+               
+               continue;
+            }
+
+            if (organizer is not {Type: OrganizerType.Organization, OrganizationId: not null}) continue;
+            
+            var organization =
+                await OrganizationRepository.GetByIdAsync(organizer.OrganizationId.Value, cancellationToken);
+            if (organization is null)
+                return Result.Failure(ActivityErrors.OrganizationOrganizerNotFound(organizer.OrganizationId.Value));
+
+            organizers.Add(new ActivityOrganizer
+            {
+                Organization = organization
+            });
+
+        }
+        
+        var currentUser = await CurrentUserService.GetCurrentUserAsync(cancellationToken);
+        
+        var status = currentUser.Role switch
         {
-            Name = request.Name,
-            Description = request.Description,
-            Objectives = request.Goals,
-            StartDate = request.StartDate,
-            EndDate = request.EndDate,
-            TotalSpots = request.TotalSpots,
-            MainCareerId = request.MainCareerId,
-            TeacherId = request.CareerTeacherId,
-            StudentId = request.CareerStudentId,
-            Location = request.Location,
-            ActivityStatus = status,
-            MainActivities = string.Join("|", request.MainActivities),
-            Scopes = scopes,
-            ForeingCareers = availableCareers
+            Role.Voae => ActivityStatus.Approved,
+            _ => ActivityStatus.Pending
         };
+        
+        var activity = request.ToEntity(status, foreignCareers, organizers, requestedById: currentUser.Id);
 
         await ActivityRepository.AddAsync(activity, cancellationToken);
+        
+        var voaeUsers = await UserRepository.GetByRoleAsync(Role.Voae, cancellationToken);
+
+        var tasks = voaeUsers.Select(user => 
+            UserMailer.SendActivityRequestedAsync(
+            user.Email, 
+            activity.Slug, 
+            cancellationToken
+        )).ToList();
+        
+        await Task.WhenAll(tasks);
 
         return Result.Success();
     }

@@ -6,53 +6,75 @@ namespace Infrastructure.Configurations;
 
 public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
 {
+    private const string ForeignActivityCareersTableName = "ForeignActivityCareers";
+
     public void Configure(EntityTypeBuilder<Activity> builder)
     {
-        builder.Property(x => x.Name)
+        builder.Property(activity => activity.Name)
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(x => x.Description)
+        builder.HasIndex(activity => activity.Name)
+            .IsUnique();
+
+        builder.Property(activity => activity.Slug)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.HasIndex(activity => activity.Slug)
+            .IsUnique();
+
+        builder.Property(activity => activity.Description)
             .HasMaxLength(350)
             .IsRequired();
 
-        builder.Property(x => x.Location)
+        builder.Property(activity => activity.Location)
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(x => x.MainActivities)
-            .HasMaxLength(300)
+        builder.Property(activity => activity.ReviewerObservations)
+            .HasMaxLength(500);
+
+        builder.Property(activity => activity.MainActivities)
+            .HasMaxLength(500)
             .IsRequired();
 
-        builder.Property(x => x.Objectives)
-            .HasMaxLength(300)
+        builder.Property(activity => activity.Goals)
+            .HasMaxLength(500)
             .IsRequired();
 
-        /*builder.Property(x => x.CareerId)
-            .IsRequired();
-        */
-
-        /*builder.Property(x => x.SupervisorId)
-            .IsRequired();
-        */
-
-        /*builder.Property(x => x.RequestedById)
-            .IsRequired();
-        */
-
-        //relation one to many with scopes, one activity can have many scopes
-        builder.HasMany(x => x.Scopes)
-            .WithOne(x => x.Activity)
-            .HasForeignKey(x => x.ActivityId)
+        builder.HasOne(activity => activity.RequestedBy)
+            .WithMany(user => user.RequestedActivities)
+            .HasForeignKey(activity => activity.RequestedById)
             .OnDelete(DeleteBehavior.Restrict);
-        //relation many to many with careers, one activity can have many careers
-        builder.HasMany(x => x.ForeingCareers)
-            .WithMany(x => x.ForaingActivities)
-            .UsingEntity(x => x.ToTable("ActivityCareers"));
-        //relation one to many with activity, one career can have many activities
-        builder.HasOne(x => x.MainCareer)
-            .WithMany(x => x.MainActivities)
-            .HasForeignKey(x => x.MainCareerId)
+
+        builder.HasOne(activity => activity.ReviewedBy)
+            .WithMany(user => user.ReviewedActivities)
+            .HasForeignKey(activity => activity.ReviewedById)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(activity => activity.Supervisor)
+            .WithMany(user => user.SupervisedActivities)
+            .HasForeignKey(activity => activity.SupervisorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(activity => activity.Coordinator)
+            .WithMany(user => user.CoordinatedActivities)
+            .HasForeignKey(activity => activity.CoordinatorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(activity => activity.Scopes)
+            .WithOne(user => user.Activity)
+            .HasForeignKey(activity => activity.ActivityId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(activity => activity.Organizers)
+            .WithOne(organizer => organizer.Activity)
+            .HasForeignKey(activity => activity.ActivityId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(activity => activity.ForeingCareers)
+            .WithMany(career => career.ForeingActivities)
+            .UsingEntity(activity => activity.ToTable(ForeignActivityCareersTableName));
     }
 }

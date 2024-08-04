@@ -7,9 +7,9 @@ using Web.Extensions;
 
 namespace Web.Controllers.V1;
 
-[AllowAnonymous]
 public class CareersController(ISender sender) : BaseController
 {
+    [AllowAnonymous]
     [HttpGet]
     [ProducesResponseType<List<CareerResponse>>(StatusCodes.Status200OK)]
     public async Task<IResult> GetAsync(CancellationToken cancellationToken)
@@ -24,6 +24,16 @@ public class CareersController(ISender sender) : BaseController
     public async Task<IResult> GetAsync(int id, [FromQuery] string? query, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetStudentsByIdQuery(id, query), cancellationToken);
+
+        return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
+    }
+
+
+    [HttpGet("{id:int}/teachers")]
+    [ProducesResponseType<List<TeacherResponse>>(StatusCodes.Status200OK)]
+    public async Task<IResult> GetAsync(int id, CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(new GetTeachersByIdQuery(id), cancellationToken);
 
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }

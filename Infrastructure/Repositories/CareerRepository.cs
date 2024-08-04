@@ -1,7 +1,7 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Repositories;
 
@@ -23,6 +23,14 @@ public class CareerRepository(ApplicationDbContext context) : ICareerRepository
     public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default)
     {
         return await context.Careers.AnyAsync(x => x.Id == id, cancellationToken);
+    }
+    
+    public async Task<IEnumerable<User>> GetTeachersByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await context.Users
+            .AsNoTracking()
+            .Where(u => u.CareerId == id && u.Role == Role.Teacher && u.EmailConfirmedAt.HasValue)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<User>> GetStudentsByIdAsync(int id, string query = "", CancellationToken cancellationToken = default)

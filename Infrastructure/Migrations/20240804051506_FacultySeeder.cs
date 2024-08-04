@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddFacultySeeder : Migration
+    public partial class FacultySeeder : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
