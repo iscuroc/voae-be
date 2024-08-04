@@ -7,4 +7,5 @@ public class Organization : EntityBase
     public required string Name { get; set; }
     
     public ICollection<ActivityOrganizer> Activities { get; set; } = null!;
+    public ICollection<User> Users { get; set; } = null!;
 }

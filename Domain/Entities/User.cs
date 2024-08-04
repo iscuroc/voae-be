@@ -1,4 +1,5 @@
-﻿using Domain.Base;
+﻿using System.Collections;
+using Domain.Base;
 using Domain.Enums;
 
 namespace Domain.Entities;
@@ -19,15 +20,16 @@ public class User : EntityBase
     public string? ResetPasswordToken { get; set; }
     public DateTime? ResetPasswordTokenSentAt { get; set; }
     public DateTime? ResetPasswordTokenExpiresAt { get; set; }
+    public Role Role { get; set; }
     
     public int? CareerId { get; set; }
     public Career? Career { get; set; }
 
-    public Role Role { get; set; }
     public ICollection<Activity> RequestedActivities { get; set; } = null!;
     public ICollection<Activity> SupervisedActivities { get; set; } = null!;
     public ICollection<Activity> CoordinatedActivities { get; set; } = null!;
     public ICollection<Activity> ReviewedActivities { get; set; } = null!;
+    public ICollection<Organization> Organizations { get; set; } = null!;
 
     public void SetRoleByEmail()
     {

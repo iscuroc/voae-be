@@ -6,6 +6,8 @@ namespace Infrastructure.Configurations;
 
 public class UserConfiguration: IEntityTypeConfiguration<User>
 {
+    private const string UserOrganizationsTableName = "UserOrganizations";
+    
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.Property(x => x.Names)
@@ -36,5 +38,9 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
             .WithMany(c => c.Users)
             .HasForeignKey(x => x.CareerId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(x => x.Organizations)
+            .WithMany(o => o.Users)
+            .UsingEntity(j => j.ToTable(UserOrganizationsTableName));
     }
 }
