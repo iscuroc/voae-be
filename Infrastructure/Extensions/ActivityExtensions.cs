@@ -14,7 +14,7 @@ public static class ActivityExtensions
         query = query.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(filters.Name))
-            query = query.Where(a => a.Name.Contains(filters.Name));
+            query = query.Where(a => a.Name.ToLower().Contains(filters.Name.ToLower()));
 
         if (filters.OrganizerCareerId.HasValue)
             query = query.Where(a => a.Organizers.Any(o => o.CareerId == filters.OrganizerCareerId));
@@ -48,6 +48,23 @@ public static class ActivityExtensions
 
         if (filters.Status.HasValue)
             query = query.Where(a => a.ActivityStatus == filters.Status);
+
+        return query;
+    }
+
+    public static IQueryable<Activity> AddIncludes(this IQueryable<Activity> query)
+    {
+        query = query
+            .Include(a => a.Supervisor)
+            .Include(a => a.Coordinator)
+            .Include(a => a.Organizers)
+            .ThenInclude(o => o.Organization)
+            .Include(a => a.Organizers)
+            .ThenInclude(o => o.Career)
+            .Include(a => a.ForeingCareers)
+            .Include(a => a.Scopes)
+            .Include(a => a.RequestedBy)
+            .Include(a => a.ReviewedBy);
 
         return query;
     }

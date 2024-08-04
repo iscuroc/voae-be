@@ -21,18 +21,9 @@ public class ActivityRepository(ApplicationDbContext context) : IActivityReposit
         var query = context.Activities.AsQueryable();
         
         return await query
-            .Include(a => a.Supervisor)
-            .Include(a => a.Coordinator)
-            .Include(a => a.Organizers)
-            .ThenInclude(o => o.Organization)
-            .Include(a => a.Organizers)
-            .ThenInclude(o => o.Career)
-            .Include(a => a.ForeingCareers)
-            .Include(a => a.Scopes)
-            .Include(a => a.RequestedBy)
-            .Include(a => a.ReviewedBy)
-            .ApplyFilters(filters)
+            .AddIncludes()
             .OrderByDescending(a => a.CreatedAt)
+            .ApplyFilters(filters)
             .Page(filters.PageNumber, filters.PageSize)
             .ToListAsync(cancellationToken);
     }
@@ -53,5 +44,12 @@ public class ActivityRepository(ApplicationDbContext context) : IActivityReposit
     public async Task<bool> ExistsBySlugAsync(string slug, CancellationToken cancellationToken = default)
     {
         return await context.Activities.AnyAsync(a => a.Slug == slug, cancellationToken);
+    }
+
+    public async Task<Activity?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        return await context.Activities
+            .AddIncludes()
+            .FirstOrDefaultAsync(a => a.Slug == slug, cancellationToken);
     }
 }

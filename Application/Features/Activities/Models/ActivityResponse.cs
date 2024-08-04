@@ -28,14 +28,14 @@ public record ActivityResponse(
 
 public record ActivityScopeResponse(
     int Id,
-    int HourAmount,
+    int Hours,
     ActivityScopes Scope
 );
 
 public record ActivityUserResponse(
     int Id,
     string Names,
-    string LastNames,
+    string Lastnames,
     Role Role
 );
 

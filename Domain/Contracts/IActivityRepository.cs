@@ -19,6 +19,7 @@ public interface IActivityRepository
     );
     
     Task<bool> ExistsBySlugAsync(string slug, CancellationToken cancellationToken = default);
+    Task<Activity?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
 }
 
 public record ActivityFilter : PaginationBase
