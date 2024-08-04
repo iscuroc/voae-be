@@ -7,14 +7,14 @@ using Shared;
 
 namespace Application.Features.Careers.QueryHandlers;
 
-public record GetTeachersByIdQueryHandler(
+public record GetStudentsByIdQueryHandler(
     ICareerRepository CareerRepository
-) : IQueryHandler<GetTeachersByIdQuery, Result<List<CareerUserResponse>>>
+) : IQueryHandler<GetStudentsByIdQuery, Result<List<CareerUserResponse>>>
 {
-    public async ValueTask<Result<List<CareerUserResponse>>> Handle(GetTeachersByIdQuery query,
+    public async ValueTask<Result<List<CareerUserResponse>>> Handle(GetStudentsByIdQuery query,
         CancellationToken cancellationToken)
     {
-        var users = await CareerRepository.GetTeachersByIdAsync(query.CareerId, query.Query, cancellationToken);
+        var users = await CareerRepository.GetStudentsByIdAsync(query.CareerId, query.query, cancellationToken);
 
         return users.ToResponse();
     }

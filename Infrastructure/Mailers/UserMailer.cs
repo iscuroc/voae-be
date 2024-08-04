@@ -5,6 +5,11 @@ namespace Infrastructure.Mailers;
 
 public class UserMailer(IEmailSender emailSender, IConfiguration configuration) : IUserMailer
 {
+    private const string FrontendtUrl = "Frontend:Url";
+    private const string ConfirmAccountUrl = "UserMailer:ConfirmAccountUrl";
+    private const string ResetPasswordUrl = "UserMailer:ResetPasswordUrl";
+    private const string ActivityRequestedUrl = "UserMailer:ActivityRequestedUrl";
+    
     public async Task SendConfirmationInstructionsAsync(
         string to,
         string token,
@@ -12,7 +17,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
     )
     {
         const string subject = "Portal Curoc - Confirme su correo electrónico";
-        var href = configuration["Frontend:Url"] + configuration["UserMailer:ConfirmAccountUrl"]!.Replace("{0}", token);
+        var href = configuration[FrontendtUrl] + configuration[ConfirmAccountUrl]!.Replace("{0}", token);
         var html = $"""
                         <h1>Portal Curoc</h1>
                         <p>Por favor, confirme su correo electrónico haciendo clic en el siguiente enlace:</p>
@@ -29,7 +34,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
     )
     {
         const string subject = "Portal Curoc - Restablezca su contraseña";
-        var href = configuration["Frontend:Url"] + configuration["Frontend:ResetPasswordUrl"]!.Replace("{0}", token);
+        var href = configuration[FrontendtUrl] + configuration[ResetPasswordUrl]!.Replace("{0}", token);
         var html = $"""
                         <h1>Portal Curoc</h1>
                         <p>Por favor, restablezca su contraseña haciendo clic en el siguiente enlace:</p>
@@ -58,7 +63,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
     public async Task SendWelcomeEmailAsync(string to, CancellationToken cancellationToken = default)
     {
         const string subject = "Bienvenido a Portal Curoc";
-        var href = configuration["Frontend:Url"]!;
+        var href = configuration[FrontendtUrl]!;
         var html = $"""
                         <h1>Bienvenido a Portal CUROC</h1>
                         <p>Gracias por registrarte. Estamos encantados de tenerte con nosotros.</p>
@@ -73,7 +78,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
         CancellationToken cancellationToken = default)
     {
         const string subject = "Nueva Actividad en Portal CUROC";
-        var href = configuration["Frontend:Url"] + configuration["Frontend:ActivityRequestedUrl"]!.Replace("{0}", activitySlug);
+        var href = configuration[FrontendtUrl] + configuration[ActivityRequestedUrl]!.Replace("{0}", activitySlug);
         var html = $"""
                         <h1>Se ha solicitado una nueva actividad</h1>
                         <p>Hay una nueva actividad disponible para ti. Puedes verla en el siguiente enlace:</p>
