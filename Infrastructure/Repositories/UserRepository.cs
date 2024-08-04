@@ -56,7 +56,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     public async Task<User?> GetByResetPasswordTokenAsync(string resetPasswordToken, CancellationToken cancellationToken = default)
     {
         var user = await context.Users
-            .FirstOrDefaultAsync(u => u.PasswordResetToken == resetPasswordToken, cancellationToken);
+            .FirstOrDefaultAsync(u => u.ResetPasswordToken == resetPasswordToken, cancellationToken);
         
         return user;
     }

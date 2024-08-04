@@ -4,12 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -81,9 +79,9 @@ namespace Infrastructure.Migrations
                     EmailConfirmationSentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     AccountNumber = table.Column<long>(type: "bigint", nullable: true),
                     Password = table.Column<string>(type: "text", nullable: true),
-                    PasswordResetToken = table.Column<string>(type: "text", nullable: true),
-                    PasswordResetTokenSentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    PasswordResetTokenExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ResetPasswordToken = table.Column<string>(type: "text", nullable: true),
+                    ResetPasswordTokenSentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ResetPasswordTokenExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CareerId = table.Column<int>(type: "integer", nullable: true),
                     Role = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -118,8 +116,8 @@ namespace Infrastructure.Migrations
                     BannerLink = table.Column<string>(type: "text", nullable: true),
                     LastRequestedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ActivityStatus = table.Column<int>(type: "integer", nullable: false),
-                    ReviewedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    ReviewObservations = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    LastReviewedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ReviewerObservations = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     SupervisorId = table.Column<int>(type: "integer", nullable: false),
                     CoordinatorId = table.Column<int>(type: "integer", nullable: false),
                     RequestedById = table.Column<int>(type: "integer", nullable: false),
@@ -157,7 +155,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ActivityOrganizer",
+                name: "ActivityOrganizers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -170,21 +168,21 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActivityOrganizer", x => x.Id);
+                    table.PrimaryKey("PK_ActivityOrganizers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ActivityOrganizer_Activities_ActivityId",
+                        name: "FK_ActivityOrganizers_Activities_ActivityId",
                         column: x => x.ActivityId,
                         principalTable: "Activities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActivityOrganizer_Careers_CareerId",
+                        name: "FK_ActivityOrganizers_Careers_CareerId",
                         column: x => x.CareerId,
                         principalTable: "Careers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ActivityOrganizer_Organizations_OrganizationId",
+                        name: "FK_ActivityOrganizers_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organizations",
                         principalColumn: "Id",
@@ -271,18 +269,18 @@ namespace Infrastructure.Migrations
                 column: "SupervisorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActivityOrganizer_ActivityId",
-                table: "ActivityOrganizer",
+                name: "IX_ActivityOrganizers_ActivityId",
+                table: "ActivityOrganizers",
                 column: "ActivityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActivityOrganizer_CareerId",
-                table: "ActivityOrganizer",
+                name: "IX_ActivityOrganizers_CareerId",
+                table: "ActivityOrganizers",
                 column: "CareerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActivityOrganizer_OrganizationId",
-                table: "ActivityOrganizer",
+                name: "IX_ActivityOrganizers_OrganizationId",
+                table: "ActivityOrganizers",
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
@@ -326,18 +324,18 @@ namespace Infrastructure.Migrations
                 filter: "\"EmailConfirmationToken\" IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_PasswordResetToken",
+                name: "IX_Users_ResetPasswordToken",
                 table: "Users",
-                column: "PasswordResetToken",
+                column: "ResetPasswordToken",
                 unique: true,
-                filter: "\"PasswordResetToken\" IS NOT NULL");
+                filter: "\"ResetPasswordToken\" IS NOT NULL");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ActivityOrganizer");
+                name: "ActivityOrganizers");
 
             migrationBuilder.DropTable(
                 name: "ActivityScopes");

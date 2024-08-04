@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240804020532_AddInitialSeeder")]
-    partial class AddInitialSeeder
+    [Migration("20240804051543_CareerSeeder")]
+    partial class CareerSeeder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,6 +76,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("LastRequestedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("LastReviewedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -94,15 +97,12 @@ namespace Infrastructure.Migrations
                     b.Property<int>("RequestedById")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ReviewObservations")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTime?>("ReviewedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int?>("ReviewedById")
                         .HasColumnType("integer");
+
+                    b.Property<string>("ReviewerObservations")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -171,7 +171,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("ActivityOrganizer");
+                    b.ToTable("ActivityOrganizers");
                 });
 
             modelBuilder.Entity("Domain.Entities.ActivityScope", b =>
@@ -350,32 +350,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Organizations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pumas en Acción"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pumas Solidarios"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "VOAE"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Estudiantina"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -423,13 +397,13 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("text");
 
-                    b.Property<string>("PasswordResetToken")
+                    b.Property<string>("ResetPasswordToken")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("PasswordResetTokenExpiresAt")
+                    b.Property<DateTime?>("ResetPasswordTokenExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("PasswordResetTokenSentAt")
+                    b.Property<DateTime?>("ResetPasswordTokenSentAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Role")
@@ -453,9 +427,9 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("\"EmailConfirmationToken\" IS NOT NULL");
 
-                    b.HasIndex("PasswordResetToken")
+                    b.HasIndex("ResetPasswordToken")
                         .IsUnique()
-                        .HasFilter("\"PasswordResetToken\" IS NOT NULL");
+                        .HasFilter("\"ResetPasswordToken\" IS NOT NULL");
 
                     b.ToTable("Users");
                 });

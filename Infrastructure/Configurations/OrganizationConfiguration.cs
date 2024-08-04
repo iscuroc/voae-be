@@ -24,7 +24,7 @@ public class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
             new Organization {Id = 3, Name = "VOAE"},
             new Organization {Id = 4, Name = "Estudiantina"}
         };
-
+        
         builder.HasData(organizations);
     }
 }

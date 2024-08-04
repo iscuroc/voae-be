@@ -13,9 +13,11 @@ public class CreateActivityValidator : AbstractValidator<CreateActivityCommand>
             .MinimumLength(4)
             .MaximumLength(50);
 
-        RuleFor(x => x.MainActivities)
+        RuleFor(x => x.Description)
             .NotNull()
-            .NotEmpty();
+            .NotEmpty()
+            .MinimumLength(4)
+            .MaximumLength(300);
 
         RuleFor(x => x.Location)
             .NotNull()
@@ -23,35 +25,30 @@ public class CreateActivityValidator : AbstractValidator<CreateActivityCommand>
             .MinimumLength(4)
             .MaximumLength(100);
 
-        RuleFor(x => x.Goals)
-            .NotNull()
-            .NotEmpty();
-
-        RuleFor(x => x.Description)
+        RuleFor(x => x.MainActivities)
             .NotNull()
             .NotEmpty()
-            .MinimumLength(4)
-            .MaximumLength(300);
+            .ForEach(x => x.NotEmpty());
 
-        RuleFor(x => x.Scopes)
+
+        RuleFor(x => x.Goals)
             .NotNull()
-            .NotEmpty();
-
-        RuleFor(x => x.StartDate)
-            .GreaterThan(DateTime.UtcNow.AddHours(-6))
-            .WithMessage("Start date must be greater than the current date");
-
-        RuleFor(x => x.EndDate)
-            .GreaterThan(x => x.StartDate)
-            .WithMessage("End date must be greater than the start date");
-
-        RuleFor(x => x.TotalSpots)
-            .GreaterThan(1);
-
+            .NotEmpty()
+            .ForEach(x => x.NotEmpty());
+        
         RuleFor(x => x.Scopes)
             .NotNull()
             .NotEmpty()
             .ForEach(x => x.SetValidator(new ActivityScopeValidator()));
+
+        RuleFor(x => x.TotalSpots)
+            .GreaterThan(1);
+
+        RuleFor(x => x.StartDate)
+            .GreaterThan(DateTime.UtcNow.AddHours(-6));
+
+        RuleFor(x => x.EndDate)
+            .GreaterThan(x => x.StartDate);
         
         RuleFor(x => x.Organizers)
             .NotNull()
@@ -59,10 +56,6 @@ public class CreateActivityValidator : AbstractValidator<CreateActivityCommand>
             .ForEach(x => x.SetValidator(new ActivityOrganizersValidator()));
 
         RuleFor(x => x.ForeignCareersIds)
-            .NotNull()
-            .NotEmpty();
-
-        RuleFor(x => x.Goals)
             .NotNull()
             .NotEmpty();
     }
@@ -73,8 +66,7 @@ public class ActivityScopeValidator : AbstractValidator<ActivityScopeRequest>
     public ActivityScopeValidator()
     {
         RuleFor(x => x.Scope)
-            .IsInEnum()
-            .WithMessage("Invalid scope");
+            .IsInEnum();
 
         RuleFor(x => x.Hours)
             .GreaterThan(0);

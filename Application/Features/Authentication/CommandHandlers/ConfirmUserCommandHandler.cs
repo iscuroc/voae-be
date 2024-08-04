@@ -19,7 +19,8 @@ public class ConfirmUserCommandHandler(
         var user = await userRepository.GetByConfirmationTokenAsync(request.EmailConfirmationToken, cancellationToken);
         if (user is null) return Result.Failure(AuthenticationErrors.InvalidToken);
 
-        if (user.EmailConfirmedAt != null) return Result.Failure(AuthenticationErrors.EmailAlreadyConfirmed);
+        if (user.EmailConfirmedAt is not null) 
+            return Result.Failure(AuthenticationErrors.EmailAlreadyConfirmed);
 
         if (user.EmailConfirmationToken != request.EmailConfirmationToken)
             return Result.Failure(AuthenticationErrors.InvalidToken);
@@ -27,14 +28,11 @@ public class ConfirmUserCommandHandler(
         if (user.EmailConfirmationTokenExpiresAt < DateTime.UtcNow)
             return Result.Failure(AuthenticationErrors.TokenExpired);
 
-        user.EmailConfirmedAt = DateTime.UtcNow;
-        user.EmailConfirmationToken = null;
-        user.EmailConfirmationTokenExpiresAt = null;
+        user.ConfirmEmail();
 
         user.Names = request.Names;
         user.Lastnames = request.Lastnames;
         user.AccountNumber = request.AccountNumber;
-
         user.Password = passwordHasher.HashPassword(request.Password);
 
         user.SetRoleByEmail();
