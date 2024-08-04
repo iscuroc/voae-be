@@ -4,7 +4,7 @@ using Application.Shared;
 using Domain.Entities;
 using Domain.Enums;
 
-namespace Application.Features.Activities.Extensions;
+namespace Application.Features.Activities.Mappers;
 
 public static class ActivityMapper
 {

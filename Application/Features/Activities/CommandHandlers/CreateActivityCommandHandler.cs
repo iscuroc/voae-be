@@ -1,6 +1,6 @@
 ﻿using Application.Contracts;
 using Application.Features.Activities.Commands;
-using Application.Features.Activities.Extensions;
+using Application.Features.Activities.Mappers;
 using Application.Shared;
 using Domain.Contracts;
 using Domain.Entities;

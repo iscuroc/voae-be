@@ -1,7 +1,7 @@
 ﻿using Application.Features.Careers.Models;
 using Domain.Entities;
 
-namespace Application.Features.Careers.Extensions;
+namespace Application.Features.Careers.Mappers;
 
 public static class CareerUserMapper
 {

@@ -1,7 +1,7 @@
 ﻿using Application.Features.Activities.Models;
 using Domain.Entities;
 
-namespace Application.Features.Activities.Extensions;
+namespace Application.Features.Activities.Mappers;
 
 public static class ActivityRelationsMapper
 {
