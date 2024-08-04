@@ -10,7 +10,7 @@ using Shared;
 namespace Application.Features.Authentication.CommandHandlers;
 
 public class RegisterUserCommandHandler(
-    IUserNotificationService userNotificationService,
+    IUserMailer userMailer,
     IUserRepository userRepository
     )
     : ICommandHandler<RegisterUserCommand, Result>
@@ -31,7 +31,7 @@ public class RegisterUserCommandHandler(
         };
         await userRepository.AddAsync(newUser, cancellationToken);
 
-        await userNotificationService.SendConfirmationInstructionsAsync(newUser.Email, token, cancellationToken);
+        await userMailer.SendConfirmationInstructionsAsync(newUser.Email, token, cancellationToken);
         
         return Result.Success();
     }

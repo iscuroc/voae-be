@@ -12,7 +12,7 @@ public class AuthController(ISender sender) : BaseController
 {
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResult> PostAsync(RegisterUserCommand command)
+    public async Task<IResult> PostAsync([FromBody] RegisterUserCommand command)
     {
         var result = await sender.Send(command);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
@@ -20,7 +20,7 @@ public class AuthController(ISender sender) : BaseController
     
     [HttpPost("confirm")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResult> PostAsync(ConfirmUserCommand command)
+    public async Task<IResult> PostAsync([FromBody] ConfirmUserCommand command)
     {
         var result = await sender.Send(command);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
@@ -37,7 +37,7 @@ public class AuthController(ISender sender) : BaseController
     
     [HttpPost("forgot-password")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResult> PostAsync(ForgotPasswordCommand command)
+    public async Task<IResult> PostAsync([FromBody] ForgotPasswordCommand command)
     {
         var result = await sender.Send(command);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
@@ -45,7 +45,7 @@ public class AuthController(ISender sender) : BaseController
     
     [HttpPost("reset-password")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResult> PostAsync(ResetPasswordCommand command)
+    public async Task<IResult> PostAsync([FromBody] ResetPasswordCommand command)
     {
         var result = await sender.Send(command);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();

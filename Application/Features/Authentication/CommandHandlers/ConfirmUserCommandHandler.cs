@@ -9,7 +9,7 @@ namespace Application.Features.Authentication.CommandHandlers;
 
 public class ConfirmUserCommandHandler(
     IUserRepository userRepository,
-    IUserNotificationService userNotificationService,
+    IUserMailer userMailer,
     IPasswordHasher passwordHasher,
     ICareerRepository careerRepository
 ) : ICommandHandler<ConfirmUserCommand, Result>
@@ -52,7 +52,7 @@ public class ConfirmUserCommandHandler(
 
         await userRepository.UpdateAsync(user, cancellationToken);
 
-        await userNotificationService.SendWelcomeEmailAsync(user.Email, cancellationToken);
+        await userMailer.SendWelcomeEmailAsync(user.Email, cancellationToken);
 
         return Result.Success();
     }

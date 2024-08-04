@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Application.Features.Careers.Models;
+﻿using Application.Features.Careers.Models;
 using Domain.Entities;
 
 namespace Application.Features.Careers.Extensions;
