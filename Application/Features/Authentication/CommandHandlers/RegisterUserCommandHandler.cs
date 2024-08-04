@@ -12,8 +12,7 @@ namespace Application.Features.Authentication.CommandHandlers;
 public class RegisterUserCommandHandler(
     IUserMailer userMailer,
     IUserRepository userRepository
-    )
-    : ICommandHandler<RegisterUserCommand, Result>
+) : ICommandHandler<RegisterUserCommand, Result>
 {
     public async ValueTask<Result> Handle(RegisterUserCommand request,
         CancellationToken cancellationToken)
@@ -21,17 +20,20 @@ public class RegisterUserCommandHandler(
         var emailExist = await userRepository.EmailExistsAsync(request.Email, cancellationToken);
         if (emailExist) return Result.Failure<TokenResponse>(AuthenticationErrors.EmailInUse);
         
-        var token = Guid.NewGuid().ToString();
-        var newUser = new User
+        var user = new User
         {
-            Email = request.Email,
-            EmailConfirmationToken = token,
-            EmailConfirmationSentAt = DateTime.UtcNow,
-            EmailConfirmationTokenExpiresAt = DateTime.UtcNow.AddDays(3)
+            Email = request.Email
         };
-        await userRepository.AddAsync(newUser, cancellationToken);
+        
+        user.GenerateConfirmationToken();
 
-        await userMailer.SendConfirmationInstructionsAsync(newUser.Email, token, cancellationToken);
+        await userRepository.AddAsync(user, cancellationToken);
+
+        await userMailer.SendConfirmationInstructionsAsync(
+            user.Email, 
+            user.EmailConfirmationToken!, 
+            cancellationToken
+        );
         
         return Result.Success();
     }

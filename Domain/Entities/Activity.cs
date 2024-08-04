@@ -17,8 +17,8 @@ public class Activity : EntityBase
     public string? BannerLink { get; set; }
     public required DateTime LastRequestedAt { get; set; }
     public ActivityStatus ActivityStatus { get; set; } = ActivityStatus.Pending;
-    public DateTime? ReviewedAt { get; set; }
-    public string? ReviewObservations { get; set; }
+    public DateTime? LastReviewedAt { get; set; }
+    public string? ReviewerObservations { get; set; }
     
     public required int SupervisorId { get; set; }
     public User Supervisor { get; set; } = null!;

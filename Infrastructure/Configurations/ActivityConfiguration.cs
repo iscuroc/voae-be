@@ -32,7 +32,7 @@ public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(activity => activity.ReviewObservations)
+        builder.Property(activity => activity.ReviewerObservations)
             .HasMaxLength(500);
 
         builder.Property(activity => activity.MainActivities)

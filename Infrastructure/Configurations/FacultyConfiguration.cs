@@ -18,7 +18,7 @@ public class FacultyConfiguration : IEntityTypeConfiguration<Faculty>
             new Faculty {Id = 2, Name = "Ciencias Económicas Administrativas y Contables"},
             new Faculty {Id = 3, Name = "Ciencias Sociales"}
         };
-
+        
         builder.HasData(faculties);
     }
 }

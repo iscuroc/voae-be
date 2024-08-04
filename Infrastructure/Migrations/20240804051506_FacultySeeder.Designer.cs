@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240804003708_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240804051506_FacultySeeder")]
+    partial class FacultySeeder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,6 +76,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("LastRequestedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("LastReviewedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -94,15 +97,12 @@ namespace Infrastructure.Migrations
                     b.Property<int>("RequestedById")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ReviewObservations")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTime?>("ReviewedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int?>("ReviewedById")
                         .HasColumnType("integer");
+
+                    b.Property<string>("ReviewerObservations")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -171,7 +171,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("ActivityOrganizer");
+                    b.ToTable("ActivityOrganizers");
                 });
 
             modelBuilder.Entity("Domain.Entities.ActivityScope", b =>
@@ -231,57 +231,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("FacultyId");
 
                     b.ToTable("Careers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 1,
-                            Name = "Ingeniería en Sistemas"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Ingeniería Agroindustrial"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Licenciatura en Comercio Internacional"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 3,
-                            Name = "Licenciatura en Desarrollo Local"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Licenciatura en Administración de Empresas"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Técnico en Administración de Empresas Cafetaleras"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 1,
-                            Name = "Técnico en Producción Agrícola"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Faculty", b =>
@@ -397,13 +346,13 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("text");
 
-                    b.Property<string>("PasswordResetToken")
+                    b.Property<string>("ResetPasswordToken")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("PasswordResetTokenExpiresAt")
+                    b.Property<DateTime?>("ResetPasswordTokenExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("PasswordResetTokenSentAt")
+                    b.Property<DateTime?>("ResetPasswordTokenSentAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Role")
@@ -427,9 +376,9 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("\"EmailConfirmationToken\" IS NOT NULL");
 
-                    b.HasIndex("PasswordResetToken")
+                    b.HasIndex("ResetPasswordToken")
                         .IsUnique()
-                        .HasFilter("\"PasswordResetToken\" IS NOT NULL");
+                        .HasFilter("\"ResetPasswordToken\" IS NOT NULL");
 
                     b.ToTable("Users");
                 });

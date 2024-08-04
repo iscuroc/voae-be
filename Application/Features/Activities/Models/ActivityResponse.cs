@@ -16,7 +16,7 @@ public record ActivityResponse(
     string? BannerLink,
     DateTime LastRequestedAt,
     ActivityStatus ActivityStatus,
-    DateTime? ReviewedAt,
+    DateTime? LastReviewedAt,
     string? ReviewObservations,
     List<ActivityOrganizerResponse> Organizers,
     ActivityUserResponse Supervisor,
