@@ -1,10 +1,13 @@
-﻿using Domain.Base;
+﻿using System.Collections;
+using Domain.Base;
 using Domain.Enums;
 
 namespace Domain.Entities;
 
 public class User : EntityBase
 {
+    private const string TeacherEmailDomain = "unah.edu.hn";
+    
     public string? Names { get; set; }
     public string? Lastnames { get; set; }
     public required string Email { get; set; }
@@ -14,18 +17,30 @@ public class User : EntityBase
     public DateTime? EmailConfirmationSentAt { get; set; }
     public long? AccountNumber { get; set; }
     public string? Password { get; set; }
-    public string? PasswordResetToken { get; set; }
-    public DateTime? PasswordResetTokenSentAt { get; set; }
-    public DateTime? PasswordResetTokenExpiresAt { get; set; }
+    public string? ResetPasswordToken { get; set; }
+    public DateTime? ResetPasswordTokenSentAt { get; set; }
+    public DateTime? ResetPasswordTokenExpiresAt { get; set; }
+    public Role Role { get; set; }
     
     public int? CareerId { get; set; }
     public Career? Career { get; set; }
 
-    public Role Role { get; set; }
+    public ICollection<Activity> RequestedActivities { get; set; } = null!;
+    public ICollection<Activity> SupervisedActivities { get; set; } = null!;
+    public ICollection<Activity> CoordinatedActivities { get; set; } = null!;
+    public ICollection<Activity> ReviewedActivities { get; set; } = null!;
+    public ICollection<Organization> Organizations { get; set; } = null!;
 
     public void SetRoleByEmail()
     {
         Role = GetRoleByEmail();
+    }
+    
+    public void ConfirmEmail()
+    {
+        EmailConfirmedAt = DateTime.UtcNow;
+        EmailConfirmationToken = null;
+        EmailConfirmationTokenExpiresAt = null;
     }
 
     public bool IsAccoutNumberValid()
@@ -51,6 +66,29 @@ public class User : EntityBase
 
     private Role GetRoleByEmail()
     {
-        return Email.EndsWith("unah.edu.hn") ? Role.Teacher : Role.Student;
+        return Email.EndsWith(TeacherEmailDomain) ? Role.Teacher : Role.Student;
     }
+
+    public void GenerateResetPasswordToken()
+    {
+        ResetPasswordToken = GenerateToken();
+        ResetPasswordTokenExpiresAt = DateTime.UtcNow.AddDays(1);
+        ResetPasswordTokenSentAt = DateTime.UtcNow;
+    }
+
+    public void GenerateConfirmationToken()
+    {
+        EmailConfirmationToken = GenerateToken();
+        EmailConfirmationSentAt = DateTime.UtcNow;
+        EmailConfirmationTokenExpiresAt = DateTime.UtcNow.AddDays(3);
+    }
+
+    public void ResetPassword(string hashedPassword)
+    {
+        Password = hashedPassword;
+        ResetPasswordToken = null;
+        ResetPasswordTokenExpiresAt = null;
+    }
+    
+    private string GenerateToken() => Guid.NewGuid().ToString();
 }

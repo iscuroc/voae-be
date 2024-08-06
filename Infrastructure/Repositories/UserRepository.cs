@@ -24,8 +24,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         var user = await context.Users
-            .Where(u => u.Email == email)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
         return user;
     }
@@ -50,17 +49,19 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     {
         var user = await context.Users
             .FirstOrDefaultAsync(u => u.EmailConfirmationToken == confirmationToken, cancellationToken);
+        
         return user;
     }
 
     public async Task<User?> GetByResetPasswordTokenAsync(string resetPasswordToken, CancellationToken cancellationToken = default)
     {
         var user = await context.Users
-            .FirstOrDefaultAsync(u => u.PasswordResetToken == resetPasswordToken, cancellationToken);
+            .FirstOrDefaultAsync(u => u.ResetPasswordToken == resetPasswordToken, cancellationToken);
+        
         return user;
     }
     
-    public async Task<IEnumerable<User>> GetUsersByRoleAsync(Role role, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<User>> GetByRoleAsync(Role role, CancellationToken cancellationToken = default)
     {
         return await context.Users.Where(u => u.Role == role).ToListAsync(cancellationToken);
     }

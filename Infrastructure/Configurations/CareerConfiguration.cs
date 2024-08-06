@@ -17,6 +17,11 @@ public class CareerConfiguration : IEntityTypeConfiguration<Career>
             .HasForeignKey(x => x.FacultyId)
             .OnDelete(DeleteBehavior.Restrict);
         
+        builder.HasMany(x => x.Activities)
+            .WithOne(a => a.Career)
+            .HasForeignKey(x => x.CareerId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         var careers = new[]
         {
             new Career {Id = 1, Name = "Ingeniería en Sistemas", FacultyId = 1},

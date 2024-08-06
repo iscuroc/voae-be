@@ -2,11 +2,11 @@
 
 public enum ActivityStatus
 {
-    RequestPending,
-    RequestRejected,
-    RequestApproved,
-    ExecutionPending,
-    ExecutionCancelled,
-    ExecutionInProgress,
-    ExecutionCompleted,
+    Pending,
+    Rejected,
+    Approved,
+    Published,
+    Cancelled,
+    InProgress,
+    Completed
 }

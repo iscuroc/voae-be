@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240730034536_AddActivityCareerRelations")]
-    partial class AddActivityCareerRelations
+    [Migration("20240804051506_FacultySeeder")]
+    partial class FacultySeeder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,17 +27,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("ActivityCareer", b =>
                 {
-                    b.Property<int>("ForaingActivitiesId")
+                    b.Property<int>("ForeingActivitiesId")
                         .HasColumnType("integer");
 
                     b.Property<int>("ForeingCareersId")
                         .HasColumnType("integer");
 
-                    b.HasKey("ForaingActivitiesId", "ForeingCareersId");
+                    b.HasKey("ForeingActivitiesId", "ForeingCareersId");
 
                     b.HasIndex("ForeingCareersId");
 
-                    b.ToTable("ActivityCareers", (string)null);
+                    b.ToTable("ForeignActivityCareers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Activity", b =>
@@ -54,6 +54,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("BannerLink")
                         .HasColumnType("text");
 
+                    b.Property<int>("CoordinatorId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -65,6 +68,17 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Goals")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("LastRequestedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastReviewedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -72,38 +86,33 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("MainActivities")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<int>("MainCareerId")
-                        .HasColumnType("integer");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Objectives")
+                    b.Property<int>("RequestedById")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ReviewedById")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ReviewerObservations")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Slug")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<DateTime>("RequestedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("ReviewDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ReviewObservations")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TeacherId")
+                    b.Property<int>("SupervisorId")
                         .HasColumnType("integer");
 
                     b.Property<int>("TotalSpots")
@@ -114,13 +123,55 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MainCareerId");
+                    b.HasIndex("CoordinatorId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("RequestedById");
+
+                    b.HasIndex("ReviewedById");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("SupervisorId");
 
                     b.ToTable("Activities");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ActivityOrganizer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CareerId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("CareerId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("ActivityOrganizers");
                 });
 
             modelBuilder.Entity("Domain.Entities.ActivityScope", b =>
@@ -137,7 +188,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("HourAmount")
+                    b.Property<int>("Hours")
                         .HasColumnType("integer");
 
                     b.Property<int>("Scope")
@@ -180,57 +231,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("FacultyId");
 
                     b.ToTable("Careers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 1,
-                            Name = "Ingeniería en Sistemas"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Ingeniería Agroindustrial"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Licenciatura en Comercio Internacional"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 3,
-                            Name = "Licenciatura en Desarrollo Local"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Licenciatura en Administración de Empresas"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 2,
-                            Name = "Técnico en Administración de Empresas Cafetaleras"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FacultyId = 1,
-                            Name = "Técnico en Producción Agrícola"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Faculty", b =>
@@ -275,6 +275,30 @@ namespace Infrastructure.Migrations
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Ciencias Sociales"
                         });
+                });
+
+            modelBuilder.Entity("Domain.Entities.Organization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Organizations");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -322,13 +346,13 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("text");
 
-                    b.Property<string>("PasswordResetToken")
+                    b.Property<string>("ResetPasswordToken")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("PasswordResetTokenExpiresAt")
+                    b.Property<DateTime?>("ResetPasswordTokenExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("PasswordResetTokenSentAt")
+                    b.Property<DateTime?>("ResetPasswordTokenSentAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Role")
@@ -352,9 +376,9 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("\"EmailConfirmationToken\" IS NOT NULL");
 
-                    b.HasIndex("PasswordResetToken")
+                    b.HasIndex("ResetPasswordToken")
                         .IsUnique()
-                        .HasFilter("\"PasswordResetToken\" IS NOT NULL");
+                        .HasFilter("\"ResetPasswordToken\" IS NOT NULL");
 
                     b.ToTable("Users");
                 });
@@ -363,7 +387,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Activity", null)
                         .WithMany()
-                        .HasForeignKey("ForaingActivitiesId")
+                        .HasForeignKey("ForeingActivitiesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -376,29 +400,61 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Activity", b =>
                 {
-                    b.HasOne("Domain.Entities.Career", "MainCareer")
-                        .WithMany("MainActivities")
-                        .HasForeignKey("MainCareerId")
+                    b.HasOne("Domain.Entities.User", "Coordinator")
+                        .WithMany("CoordinatedActivities")
+                        .HasForeignKey("CoordinatorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.User", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
+                    b.HasOne("Domain.Entities.User", "RequestedBy")
+                        .WithMany("RequestedActivities")
+                        .HasForeignKey("RequestedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "ReviewedBy")
+                        .WithMany("ReviewedActivities")
+                        .HasForeignKey("ReviewedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Entities.User", "Supervisor")
+                        .WithMany("SupervisedActivities")
+                        .HasForeignKey("SupervisorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Coordinator");
+
+                    b.Navigation("RequestedBy");
+
+                    b.Navigation("ReviewedBy");
+
+                    b.Navigation("Supervisor");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ActivityOrganizer", b =>
+                {
+                    b.HasOne("Domain.Entities.Activity", "Activity")
+                        .WithMany("Organizers")
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.User", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Domain.Entities.Career", "Career")
+                        .WithMany("Activities")
+                        .HasForeignKey("CareerId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("MainCareer");
+                    b.HasOne("Domain.Entities.Organization", "Organization")
+                        .WithMany("Activities")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Student");
+                    b.Navigation("Activity");
 
-                    b.Navigation("Teacher");
+                    b.Navigation("Career");
+
+                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("Domain.Entities.ActivityScope", b =>
@@ -406,7 +462,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Activity", "Activity")
                         .WithMany("Scopes")
                         .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Activity");
@@ -435,12 +491,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Activity", b =>
                 {
+                    b.Navigation("Organizers");
+
                     b.Navigation("Scopes");
                 });
 
             modelBuilder.Entity("Domain.Entities.Career", b =>
                 {
-                    b.Navigation("MainActivities");
+                    b.Navigation("Activities");
 
                     b.Navigation("Users");
                 });
@@ -448,6 +506,22 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Faculty", b =>
                 {
                     b.Navigation("Careers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Organization", b =>
+                {
+                    b.Navigation("Activities");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.Navigation("CoordinatedActivities");
+
+                    b.Navigation("RequestedActivities");
+
+                    b.Navigation("ReviewedActivities");
+
+                    b.Navigation("SupervisedActivities");
                 });
 #pragma warning restore 612, 618
         }

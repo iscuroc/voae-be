@@ -4,34 +4,47 @@ namespace Domain.Errors;
 
 public static class ActivityErrors
 {
-    public static Error TeacherNotFound => Error.NotFound(
-        "Activity.TeacherNotFound",
-        "Teacher not found"
+    public static Error ActivityNameAlreadyExists(string name) => Error.Conflict(
+        "Activity.ActivityNameAlreadyExists",
+        $"An Activity with the name {name} already exists"
     );
-    
-    public static Error StudentNotFound => Error.NotFound(
-        "Activity.StudentNotFound",
-        "Student not found"
-    );
-    
-    public static Error CareerNotFound => Error.NotFound(
-        "Activity.CareerNotFound",
-        "Career not found"
-    );
-    
-    public static Error AvailableCareerNotFound(int id) => Error.NotFound(
-        "Activity.AvailableCareerNotFound",
-        $"Career with id {id} not found"
-    );
-    
-    public static Error InvalidTeacherRole => Error.Conflict(
-        "Activity.InvalidTeacherRole",
-        "The user is not a teacher"
+    public static Error SupervisorNotFound => Error.NotFound(
+        "Activity.SupervisorNotFound",
+        "Supervisor was not found"
     );
 
-    public static Error InvalidStudentRole => Error.Conflict(
-        "Activity.InvalidStudentRole",
-        "The user is not a student"
-        );
-    
+    public static Error CoordinatorNotFound => Error.NotFound(
+        "Activity.CoordinatorNotFound",
+        "Coordinator was not found"
+    );
+
+    public static Error CareerOrganizerNotFound(int id) => Error.NotFound(
+        "Activity.CareerOrganizerNotFound",
+        $"The Career Organizer with id {id} was not found"
+    );
+
+    public static Error OrganizationOrganizerNotFound(int id) => Error.NotFound(
+        "Activity.OrganizationOrganizerNotFound",
+        $"The Organization Organizer with id {id} was not found"
+    );
+
+    public static Error ForeignCareerNotFound(int id) => Error.NotFound(
+        "Activity.ForeignCareerNotFound",
+        $"The foreign career with id {id} was not found"
+    );
+
+    public static Error InvalidSupervisorRole => Error.Conflict(
+        "Activity.InvalidSupervisorRole",
+        "The Supervisor must be a teacher"
+    );
+
+    public static Error InvalidCoordinatorRole => Error.Conflict(
+        "Activity.InvalidCoordinatorRole",
+        "The Coordinator must be a student"
+    );
+
+    public static Error ActivitySlugNotFound => Error.NotFound(
+        "Activity.ActivitySlugNotFound",
+        "Activity with the provided slug was not found"
+    );
 }

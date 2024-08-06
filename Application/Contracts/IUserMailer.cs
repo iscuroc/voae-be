@@ -1,6 +1,6 @@
 ﻿namespace Application.Contracts;
 
-public interface IUserNotificationService
+public interface IUserMailer
 {
     Task SendConfirmationInstructionsAsync(
         string to, 
@@ -8,7 +8,7 @@ public interface IUserNotificationService
         CancellationToken cancellationToken = default
     );
     
-    Task SendResetPasswordInstructionsAsync(
+    Task SendForgotPasswordInstructionsAsync(
         string to, 
         string token, 
         CancellationToken cancellationToken = default
@@ -19,14 +19,14 @@ public interface IUserNotificationService
         CancellationToken cancellationToken = default
     );
 
-    Task SendPasswordResetConfirmationAsync(
+    Task SendResetPasswordConfirmationAsync(
         string to,
         CancellationToken cancellationToken = default
     );
     
-    Task SendNewActivityEmailAsync(
-        string to, int activityLink, 
+    Task SendActivityRequestedAsync(
+        string to, 
+        string activitySlug, 
         CancellationToken cancellationToken = default
     );
-    
 }

@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Enums;
+﻿using Domain.Enums;
 using Mediator;
 using Shared;
 
@@ -8,20 +7,32 @@ namespace Application.Features.Activities.Commands;
 public record CreateActivityCommand(
     string Name,
     string Description,
-    int MainCareerId,
-    List<int> AvailableCareers,
+    List<int> ForeignCareersIds,
     DateTime StartDate,
     DateTime EndDate,
-    string Goals,
-    List<ActivityScope> Scopes,
-    int CareerTeacherId,
-    int CareerStudentId,
+    List<string> Goals,
+    List<ActivityScopeRequest> Scopes,
+    int SupervisorId,
+    int CoordinatorId,
     int TotalSpots,
     string Location,
-    IList<string> MainActivities
+    List<string> MainActivities,
+    List<ActivityOrganizerRequest> Organizers
 ) : ICommand<Result>;
 
-public record ActivityScope(
+public record ActivityScopeRequest(
     ActivityScopes Scope,
     int Hours
 );
+
+public record ActivityOrganizerRequest(
+    int? CareerId,
+    int? OrganizationId,
+    OrganizerType Type
+);
+
+public enum OrganizerType
+{
+    Career,
+    Organization
+}
