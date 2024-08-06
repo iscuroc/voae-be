@@ -22,4 +22,11 @@
       <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Users\Mappers\" />
+      <Folder Include="Features\Users\Models\" />
+      <Folder Include="Features\Users\Queries\" />
+      <Folder Include="Features\Users\QueryHandlers\" />
+    </ItemGroup>
+
 </Project>
