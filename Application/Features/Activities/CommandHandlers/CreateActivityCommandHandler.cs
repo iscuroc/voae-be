@@ -15,7 +15,6 @@ namespace Application.Features.Activities.CommandHandlers;
 public record CreateActivityCommandHandler(
     IActivityRepository ActivityRepository,
     IUserMailer UserMailer,
-    IUserNotificationService UserNotificationService,
     ICurrentUserService CurrentUserService,
     ICareerRepository CareerRepository,
     IUserRepository UserRepository,
@@ -85,8 +84,8 @@ public record CreateActivityCommandHandler(
 
         await ActivityRepository.AddAsync(activity, cancellationToken);
         
-        var voaeUsers = await UserRepository.GetUsersByRoleAsync(Role.Voae, cancellationToken);
-        var activityLink = activity.Id;
+        var voaeUsers = await UserRepository.GetByRoleAsync(Role.Voae, cancellationToken);
+        //var activityLink = activity.Id;
 
         var tasks = voaeUsers.Select(user => 
             UserMailer.SendActivityRequestedAsync(
@@ -96,11 +95,6 @@ public record CreateActivityCommandHandler(
         )).ToList();
         
         await Task.WhenAll(tasks);
-
-        foreach (var user in voaeUsers)
-        {
-            await UserNotificationService.SendNewActivityEmailAsync(user.Email, activityLink, cancellationToken);
-        }
 
         return Result.Success();
     }
