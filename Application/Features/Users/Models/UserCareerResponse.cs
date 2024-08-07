@@ -1,8 +1,7 @@
-namespace Domain.Entities
+namespace Application.Features.Careers.Models
 {
-    public class UserCareerResponse
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
+    public record struct UserCareerResponse(
+        int Id,
+        string Name
+    );
 }

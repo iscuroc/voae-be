@@ -1,12 +1,11 @@
-namespace Domain.Entities
+namespace Application.Features.Users.Models
 {
-    public class UserResponse
-    {
-        public int Id { get; set; }
-        public string Names { get; set; }
-        public string Lastnames { get; set; }
-        public string AccountNumber { get; set; }
-        public string Role { get; set; }
-        public string Career { get; set; }
-    }
+    public record struct UserResponse(
+        int Id,
+        string Names,
+        string Lastnames,
+        string AccountNumber,
+        string Role,
+        string Carer
+    );
 }

@@ -5,8 +5,7 @@ namespace Infrastructure;
 
 public class ApplicationDbContext(DbContextOptions options) : TablesRoot(options)
 {
-    public DbSet<UserCareerResponse> UserCareerResponses { get; set; }
-    public DbSet<UserResponse> UserResponses { get; set; }
+    
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var utcNow = DateTime.UtcNow;
