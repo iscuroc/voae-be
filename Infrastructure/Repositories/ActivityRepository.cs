@@ -52,4 +52,11 @@ public class ActivityRepository(ApplicationDbContext context) : IActivityReposit
             .AddIncludes()
             .FirstOrDefaultAsync(a => a.Slug == slug, cancellationToken);
     }
+
+    public async Task UpdateAsync(Activity activity, CancellationToken cancellationToken = default)
+    {
+        context.Activities.Update(activity);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
 }
