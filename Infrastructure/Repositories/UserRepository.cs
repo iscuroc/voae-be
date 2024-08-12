@@ -31,7 +31,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
 
     public async Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await context.Users.FindAsync([id], cancellationToken);
+        return await context.Users.FindAsync(u => u.Career == career, [id], cancellationToken);
     }
 
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
