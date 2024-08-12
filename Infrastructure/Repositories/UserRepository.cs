@@ -29,9 +29,13 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         return user;
     }
 
-    public async Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<User?> GetByIdAsync(int careerId, int id, CancellationToken cancellationToken = default)
     {
-        return await context.Users.FindAsync(u => u.Career == career, [id], cancellationToken);
+
+        var user = await context.Users
+            .FirstOrDefaultAsync(u => u.Career != null && u.Career.Id == careerId, cancellationToken);
+
+        return await context.Users.FindAsync([id], cancellationToken);
     }
 
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
