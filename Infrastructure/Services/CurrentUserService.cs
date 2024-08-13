@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Application.Contracts;
+using Application.Features.Users.Models;
 using Domain.Contracts;
 using Domain.Entities;
 using Domain.Enums;
@@ -26,5 +27,10 @@ public class CurrentUserService(
         var user = await userRepository.GetByIdAsync(int.Parse(userId!), cancellationToken);
         
         return user!.Role;
+    }
+
+    public async Task<UserResponse?> GetCurrentUserAsync()
+    {
+        return await Task.FromResult(new UserResponse());
     }
 }
