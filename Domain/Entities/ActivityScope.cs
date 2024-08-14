@@ -7,7 +7,7 @@ public class ActivityScope : EntityBase
 {
     public ActivityScopes Scope { get; set; }
 
-    public int Hours { get; set; }
+    public required int Hours { get; set; }
 
     public int ActivityId { get; set; }
 
