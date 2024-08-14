@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,5 +52,21 @@ public class ActivityRepository(ApplicationDbContext context) : IActivityReposit
         return await context.Activities
             .AddIncludes()
             .FirstOrDefaultAsync(a => a.Slug == slug, cancellationToken);
+    }
+
+    public async Task<Activity?> GetByIdAsync(
+        int id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await context.Activities
+            .AddIncludes()
+            .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+    }
+
+    public async Task UpdateAsync(Activity activity, CancellationToken cancellationToken = default)
+    {
+        context.Activities.Update(activity);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }
