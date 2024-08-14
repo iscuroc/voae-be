@@ -47,4 +47,29 @@ public static class ActivityErrors
         "Activity.ActivitySlugNotFound",
         "Activity with the provided slug was not found"
     );
+
+    public static Error ActivityNotFound => Error.NotFound(
+        "Activity.ActivityNotFound",
+        $"Activity with the provided id was not found"
+    );
+
+    public static Error InvalidActivityStatusForRejection => Error.Conflict(
+        "Activity.InvalidActivityStatusForRejection",
+        "Activity can only be rejected if its status is Pending"
+    );
+
+    public static Error InvalidUserRole => Error.Conflict(
+        "Activity.InvalidActivityStatusForRejection",
+        "Activity can only be rejected by VOAE users"
+    );
+
+    public static Error InvalidActivityStatusForApproval => Error.Conflict(
+        "Activity.InvalidActivityStatusForApproval",
+        "Activity can only be approved if its status is Pending or Rejected"
+    );
+
+    public static Error InvalidApprovalUserRole => Error.Conflict(
+        "Activity.InvalidApprovalUserRole",
+        "Activity can only be approved by VOAE users"
+    );
 }

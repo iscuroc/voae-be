@@ -33,4 +33,14 @@ public class ActivitiesController(ISender sender) : BaseController
 
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
+
+    [HttpPut("{id:int}/approve")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IResult> PutAsync(int id, [FromBody] ApproveActivityRequest request, CancellationToken cancellationToken)
+    {
+        var command = new ApproveActivityCommand(id, request.ReviewerObservation);
+        var result = await sender.Send(command, cancellationToken);
+        return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
+    }
 }
