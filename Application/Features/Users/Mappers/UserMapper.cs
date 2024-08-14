@@ -13,7 +13,7 @@ public static class UserMapper
             Lastnames: user.Lastnames!,
             AccountNumber: user.AccountNumber!.Value,
             Role: user.Role,
-            Career: user.Career
+            Career: user.Career.ToResponse
         );
     }
     
