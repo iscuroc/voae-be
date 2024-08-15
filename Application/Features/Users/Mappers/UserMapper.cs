@@ -1,5 +1,3 @@
-using Application.Features.Activities.Models;
-using Application.Features.Careers.Mappers;
 using Application.Features.Users.Models;
 using Domain.Entities;
 
@@ -15,7 +13,8 @@ public static class UserMapper
             Lastnames: user.Lastnames!,
             AccountNumber: user.AccountNumber!.Value,
             Role: user.Role,
-            UserCareer: user.Career!.ToResponse()
+            Career: user.CareerId is not null ? user.Career!.ToResponse() : null,
+            Organizations: user.Organizations.ToResponse()
         );
     }
     
@@ -31,4 +30,18 @@ public static class UserMapper
             Name: career.Name
         );
     }
+    
+    public static UserOrganizationResponse ToResponse(this Organization organization)
+    {
+        return new UserOrganizationResponse(
+            Id: organization.Id,
+            Name: organization.Name
+        );
+    }
+    
+    public static List<UserOrganizationResponse> ToResponse(this IEnumerable<Organization> organizations)
+    {
+        return organizations.Select(organization => organization.ToResponse()).ToList();
+    }
+    
 }

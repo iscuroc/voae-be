@@ -8,10 +8,16 @@ namespace Application.Features.Users.Models
         string Lastnames,
         long AccountNumber,
         Role Role,
-        UserCareerResponse UserCareer
+        UserCareerResponse? Career,
+        List<UserOrganizationResponse> Organizations
     );
 
     public record struct UserCareerResponse(
+        int Id,
+        string Name
+    );
+    
+    public record struct UserOrganizationResponse(
         int Id,
         string Name
     );
