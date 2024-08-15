@@ -1,3 +1,4 @@
+using Application.Features.Activities.Models;
 using Application.Features.Careers.Mappers;
 using Application.Features.Users.Models;
 using Domain.Entities;
@@ -13,13 +14,21 @@ public static class UserMapper
             Names: user.Names!,
             Lastnames: user.Lastnames!,
             AccountNumber: user.AccountNumber!.Value,
-            Role: user.Role
-            //UserCareerResponse: user.Career.ToResponse()
+            Role: user.Role,
+            UserCareer: user.Career!.ToResponse()
         );
     }
     
     public static List<UserResponse> ToResponse(this IEnumerable<User> users)
     {
         return users.Select(user => user.ToResponse()).ToList();
+    }
+
+    public static UserCareerResponse ToResponse(this Career career)
+    {
+        return new UserCareerResponse(
+            Id: career.Id,
+            Name: career.Name
+        );
     }
 }

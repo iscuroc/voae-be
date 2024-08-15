@@ -7,7 +7,12 @@ namespace Application.Features.Users.Models
         string Names,
         string Lastnames,
         long AccountNumber,
-        Role Role
-        //UserCareerResponse UserCareerResponse
+        Role Role,
+        UserCareerResponse UserCareer
+    );
+
+    public record struct UserCareerResponse(
+        int Id,
+        string Name
     );
 }
