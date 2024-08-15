@@ -46,7 +46,7 @@ public class ActivitiesController(ISender sender) : BaseController
 
     [HttpPut("{id:int}/reject")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResult> PostAsync(int id, [FromBody] RejectActivityRequest request, CancellationToken cancellationToken)
+    public async Task<IResult> PutAsync(int id, [FromBody] RejectActivityRequest request, CancellationToken cancellationToken)
     {
         var command = new RejectActivityCommand(id, request.ReviewerObservation);
         var result = await sender.Send(command, cancellationToken);
