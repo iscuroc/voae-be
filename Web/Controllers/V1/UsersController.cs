@@ -1,3 +1,4 @@
+using Application.Features.Users.Models;
 using Application.Features.Users.Queries;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ namespace Web.Controllers.V1;
 public class UsersController(ISender sender) : BaseController
 {
     [HttpGet("/me")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<UserResponse>(StatusCodes.Status200OK)]
     public async Task<IResult> GetCurrentUserAsync(CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetCurrentUserQuery(), cancellationToken);
