@@ -44,7 +44,7 @@ public class ActivitiesController(ISender sender) : BaseController
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
     }
 
-    [HttpPost("{id:int}/reject")]
+    [HttpPut("{id:int}/reject")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IResult> PostAsync(int id, [FromBody] RejectActivityRequest request, CancellationToken cancellationToken)
     {
