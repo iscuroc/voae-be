@@ -19,7 +19,7 @@ namespace Application.Features.Users.Queries
         {
             var user = await _currentUser.GetCurrentUserAsync();
 
-            return Result<UserResponse>.Success(user.ToResponse());
+            return user.ToResponse();
         }
     }
 }
