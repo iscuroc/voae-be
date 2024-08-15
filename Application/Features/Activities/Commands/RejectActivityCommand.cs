@@ -3,7 +3,7 @@ using Shared;
 
 namespace Application.Features.Activities.Commands;
 public record RejectActivityCommand(
-    int Id,
+    int ActivityId,
     string ReviewerObservation
 ) : ICommand<Result>;
 

@@ -17,7 +17,7 @@ namespace Application.Features.Activities.CommandHandlers
         public async ValueTask<Result> Handle(RejectActivityCommand request, CancellationToken cancellationToken)
         {
 
-            var activity = await ActivityRepository.GetByIdAsync(request.Id, cancellationToken);
+            var activity = await ActivityRepository.GetByIdAsync(request.ActivityId, cancellationToken);
             if (activity is null) return Result.Failure(ActivityErrors.ActivityNotFound);
 
             var currentUser = await CurrentUserService.GetCurrentUserAsync(cancellationToken);
