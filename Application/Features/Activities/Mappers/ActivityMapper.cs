@@ -25,7 +25,7 @@ public static class ActivityMapper
             LastRequestedAt: activity.LastRequestedAt,
             ActivityStatus: activity.ActivityStatus,
             LastReviewedAt: activity.LastReviewedAt,
-            ReviewObservations: activity.ReviewerObservations,
+            ReviewObservations: activity.ReviewerObservations.MapStringToList(),
             Organizers: activity.Organizers.ToResponse(),
             Supervisor: activity.Supervisor.ToResponse(),
             Coordinator: activity.Coordinator.ToResponse(),

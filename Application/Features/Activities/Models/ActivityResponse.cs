@@ -17,7 +17,7 @@ public record ActivityResponse(
     DateTime LastRequestedAt,
     ActivityStatus ActivityStatus,
     DateTime? LastReviewedAt,
-    string? ReviewObservations,
+    List<string> ReviewObservations,
     List<ActivityOrganizerResponse> Organizers,
     ActivityUserResponse Supervisor,
     ActivityUserResponse Coordinator,
