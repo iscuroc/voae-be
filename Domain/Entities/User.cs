@@ -30,6 +30,7 @@ public class User : EntityBase
     public ICollection<Activity> CoordinatedActivities { get; set; } = null!;
     public ICollection<Activity> ReviewedActivities { get; set; } = null!;
     public ICollection<Organization> Organizations { get; set; } = null!;
+    public ICollection<ActivityMember> JoinedActivities { get; set; } = null!;
 
     public void SetRoleByEmail()
     {

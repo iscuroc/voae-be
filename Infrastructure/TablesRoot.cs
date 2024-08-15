@@ -12,4 +12,6 @@ public abstract class TablesRoot(DbContextOptions options) : DbContext(options)
     public DbSet<ActivityOrganizer> ActivityOrganizers => Set<ActivityOrganizer>();
     public DbSet<ActivityScope> ActivityScopes => Set<ActivityScope>();
     public DbSet<Organization> Organizations => Set<Organization>();
+    public DbSet<ActivityMember> ActivityMembers => Set<ActivityMember>();
+    public DbSet<ActivityMemberScope> ActivityMemberScopes => Set<ActivityMemberScope>();
 }

@@ -35,4 +35,5 @@ public class Activity : EntityBase
     public required ICollection<ActivityScope> Scopes { get; set; } 
     public required ICollection<Career> ForeingCareers { get; set; }
     public required ICollection<ActivityOrganizer> Organizers { get; set; }
+    public ICollection<ActivityMember> Members { get; set; } = null!;
 }
