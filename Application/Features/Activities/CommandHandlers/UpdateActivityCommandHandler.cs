@@ -34,7 +34,7 @@ public record UpdateActivityCommandHandler(
         
         if(currentUser != activity.RequestedBy) return Result.Failure(ActivityErrors.InvalidActivityOwner);
         
-        if(activity.ActivityStatus != ActivityStatus.Rejected) return Result.Failure(ActivityErrors.InvalidActivityStatus);
+        if(activity.ActivityStatus != ActivityStatus.Rejected) return Result.Failure(ActivityErrors.InvalidUpdateStatus);
 
         var supervisor = await UserRepository.GetByIdAsync(request.SupervisorId, cancellationToken);
         if (supervisor is null) return Result.Failure(ActivityErrors.SupervisorNotFound);

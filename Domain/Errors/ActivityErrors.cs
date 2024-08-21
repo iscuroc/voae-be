@@ -79,8 +79,8 @@ public static class ActivityErrors
         "Activity can only be joined by a student"
     );
 
-    public static Error InvalidActivityStatus => Error.Conflict(
-        "Activity.InvalidActivityStatus",
+    public static Error InvalidJoinedStatus => Error.Conflict(
+        "Activity.InvalidJoinedStatus",
         "Activity can only be joined if its status is Published"
     );
 
@@ -95,5 +95,21 @@ public static class ActivityErrors
     public static Error InvalidActivityOwner => Error.Conflict(
         "Activity.InvalidActivityOwner",
         "The user is not the owner of the activity"
+    );
+    public static Error InvalidUpdateStatus => Error.Conflict(
+        "Activity.InvalidActivityStatus",
+        "Activity can only be updated if its status is Rejected"
+    );
+    public static Error CannotUploadBanner => Error.Conflict(
+        "Activity.CannotUploadBanner",
+        "The banner could not be uploaded due to its status"
+    );
+    public static Error InvalidBannerSize => Error.Conflict(
+        "Activity.InvalidBannerSize",
+        "The banner must be less than 3MB"
+    );
+    public static Error InvalidBannerType => Error.Conflict(
+        "Activity.InvalidBannerType",
+        "The banner must be a jpeg or png image"
     );
 }
