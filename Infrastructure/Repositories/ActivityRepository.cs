@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
+using static Domain.Contracts.IActivityRepository;
 
 namespace Infrastructure.Repositories;
 
@@ -74,5 +75,32 @@ public class ActivityRepository(ApplicationDbContext context) : IActivityReposit
     {
         await context.ActivityMembers.AddAsync(activityMember, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
+    }
+    public async Task<IEnumerable<Activity>> GetMyRequestsAsync(
+        UserRequestsFilter filters,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var query = context.Activities.AsQueryable();
+        
+        return await query
+            .AddIncludes()
+            .OrderByDescending(a => a.CreatedAt)
+            .ApplyRequestFilters(filters)
+            .Page(filters.PageNumber, filters.PageSize)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<long> CountMyRequestsAsync(
+        UserRequestsFilter filters,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var query = context.Activities.AsQueryable();
+
+        return await query
+            .OrderByDescending(a => a.CreatedAt)
+            .ApplyRequestFilters(filters)
+            .CountAsync(cancellationToken);
     }
 }
