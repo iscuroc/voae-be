@@ -68,4 +68,16 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     {
         return await context.Users.Where(u => u.Role == role).ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<User>> GetUserActivitiesAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        return await context.Users
+            .Where(a => a.Id == userId)
+            .ToListAsync(cancellationToken);
+    }
+
+    Task<IEnumerable<Activity>> IUserRepository.GetUserActivitiesAsync(int userId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
