@@ -30,13 +30,15 @@ public interface IUserMailer
         CancellationToken cancellationToken = default
     );
 
-    Task SendApproveActivityAsync(
+    Task SendRejectActivityAsync(
         string to,
+        string ReviewerObservations,
         CancellationToken cancellationToken = default
     );
 
-    Task SendRejectActivityAsync(
+    
+    Task SendApproveActivityAsync(
         string to,
-        CancellationToken cancellationToken = default
-    );
+        CancellationToken cancellationToken = default
+    );
 }

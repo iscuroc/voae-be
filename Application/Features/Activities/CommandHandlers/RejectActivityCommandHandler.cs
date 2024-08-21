@@ -11,6 +11,7 @@ namespace Application.Features.Activities.CommandHandlers
     public record RejectActivityCommandHandler(
         IActivityRepository ActivityRepository,
         IUserRepository UserRepository,
+        IUserMailer UserMailer,
         ICurrentUserService CurrentUserService
     ) : ICommandHandler<RejectActivityCommand, Result>
     {
@@ -34,16 +35,14 @@ namespace Application.Features.Activities.CommandHandlers
             activity.ReviewedById = currentUser.Id;
 
             await ActivityRepository.UpdateAsync(activity, cancellationToken);
-            var Users = await UserRepository.GetByRoleAsync(Role.Student, cancellationToken);
-
-            var tasks = Users.Select(user =>
-                UserMailer.SendRejectActivityAsync(
-                user.Email,
-                activity.Slug,
-                cancellationToken
-            )).ToList();
-
-            await Task.WhenAll(tasks);
+            if (currentUser != null)
+            {
+                await UserMailer.SendRejectActivityAsync(
+                    currentUser.Email,
+                    activity.ReviewerObservations,
+                    cancellationToken
+            );
+            }
 
             return Result.Success();
         }
