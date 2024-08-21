@@ -64,7 +64,8 @@ public static class ActivityExtensions
             .Include(a => a.ForeingCareers)
             .Include(a => a.Scopes)
             .Include(a => a.RequestedBy)
-            .Include(a => a.ReviewedBy);
+            .Include(a => a.ReviewedBy)
+            .Include(a => a.Members);
 
         return query;
     }

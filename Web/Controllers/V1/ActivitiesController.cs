@@ -36,7 +36,6 @@ public class ActivitiesController(ISender sender) : BaseController
 
     [HttpPut("{id:int}/approve")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IResult> PutAsync(int id, [FromBody] ApproveActivityRequest request, CancellationToken cancellationToken)
     {
         var command = new ApproveActivityCommand(id, request.ReviewerObservation);
@@ -49,6 +48,15 @@ public class ActivitiesController(ISender sender) : BaseController
     public async Task<IResult> PutAsync(int id, [FromBody] RejectActivityRequest request, CancellationToken cancellationToken)
     {
         var command = new RejectActivityCommand(id, request.ReviewerObservation);
+        var result = await sender.Send(command, cancellationToken);
+        return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
+    }
+    
+    [HttpPut("{id:int}/join")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IResult> PutAsync(int id, [FromBody] JoinActivityRequest request, CancellationToken cancellationToken)
+    {
+        var command = new JoinActivityCommand(id, request.Scopes);
         var result = await sender.Send(command, cancellationToken);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
     }

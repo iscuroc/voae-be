@@ -22,6 +22,7 @@ public interface IActivityRepository
     Task<Activity?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<Activity?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task UpdateAsync(Activity activity, CancellationToken cancellationToken);
+    Task AddMemberAsync(ActivityMember activityMember, CancellationToken cancellationToken);
 }
 
 public record ActivityFilter : PaginationBase
