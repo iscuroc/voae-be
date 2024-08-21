@@ -25,24 +25,25 @@ public static class ActivityMapper
             LastRequestedAt: activity.LastRequestedAt,
             ActivityStatus: activity.ActivityStatus,
             LastReviewedAt: activity.LastReviewedAt,
-            ReviewObservations: activity.ReviewerObservations.MapStringToList(),
+            ReviewObservations: !string.IsNullOrWhiteSpace(activity.ReviewerObservations)
+                ? activity.ReviewerObservations.MapStringToList()
+                : [],
             Organizers: activity.Organizers.ToResponse(),
             Supervisor: activity.Supervisor.ToResponse(),
             Coordinator: activity.Coordinator.ToResponse(),
             RequestedBy: activity.RequestedBy.ToResponse(),
             ForeingCareers: activity.ForeingCareers.ToResponse(),
             Scopes: activity.Scopes.ToResponse()
-            
         );
     }
-    
+
     public static List<ActivityResponse> ToResponse(this IEnumerable<Activity> activities)
     {
         return activities.Select(activity => activity.ToResponse()).ToList();
     }
 
     public static Activity ToEntity(
-        this CreateActivityCommand request, 
+        this CreateActivityCommand request,
         ActivityStatus status,
         List<Career> foreignCareers,
         List<ActivityOrganizer> organizers,
@@ -54,7 +55,7 @@ public static class ActivityMapper
             Scope = scope.Scope,
             Hours = scope.Hours
         }).ToList();
-        
+
         var activity = new Activity
         {
             Name = request.Name,
@@ -75,8 +76,7 @@ public static class ActivityMapper
             LastRequestedAt = DateTime.UtcNow,
             Organizers = organizers
         };
-        
+
         return activity;
     }
 }
-

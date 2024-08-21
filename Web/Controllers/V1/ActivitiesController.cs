@@ -60,4 +60,28 @@ public class ActivitiesController(ISender sender) : BaseController
         var result = await sender.Send(command, cancellationToken);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
     }
+    [HttpPut("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IResult> PutAsync(int id, [FromBody] UpdateActivityRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateActivityCommand(
+            id,
+            request.Name,
+            request.Description,
+            request.ForeignCareersIds,
+            request.StartDate,
+            request.EndDate,
+            request.Goals,
+            request.Scopes,
+            request.SupervisorId,
+            request.CoordinatorId,
+            request.TotalSpots,
+            request.Location,
+            request.MainActivities,
+            request.Organizers
+        );
+        
+        var result = await sender.Send(command, cancellationToken);
+        return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
+    }
 }
