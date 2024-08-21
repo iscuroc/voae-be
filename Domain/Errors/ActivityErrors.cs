@@ -92,4 +92,8 @@ public static class ActivityErrors
         "Activity.InvalidScope",
         "The scope is not valid for the activity"
     );
+    public static Error InvalidActivityOwner => Error.Conflict(
+        "Activity.InvalidActivityOwner",
+        "The user is not the owner of the activity"
+    );
 }
