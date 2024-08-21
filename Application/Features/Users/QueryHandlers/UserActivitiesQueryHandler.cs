@@ -29,8 +29,8 @@ public record UserActivitiesQueryHandler(
             Id: member.Activity.Id,
             Name: member.Activity.Name,
             Description: member.Activity.Description,
-                Scope: member.Activity.Scopes.Select(scope => new ActivitiesScopeResponse(
-                    ActivityScopes: scope.Scope,
+                Scope: member.Scopes.Select(scope => new ActivitiesScopeResponse(
+                    ActivityScopes: scope.MemberScope,
                     Hours: scope.Hours
                 )).ToList(),
             StartDate: member.Activity.StartDate,
