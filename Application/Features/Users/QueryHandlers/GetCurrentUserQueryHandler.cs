@@ -1,10 +1,11 @@
-using Mediator;
-using Application.Features.Users.Models;
-using Shared;
 using Application.Contracts;
 using Application.Features.Users.Mappers;
+using Application.Features.Users.Models;
+using Application.Features.Users.Queries;
+using Mediator;
+using Shared;
 
-namespace Application.Features.Users.Queries
+namespace Application.Features.Users.QueryHandlers
 {
     public class GetCurrentUserQueryHandler : IQueryHandler<GetCurrentUserQuery, Result<UserResponse>>
     {

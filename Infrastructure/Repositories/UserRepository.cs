@@ -1,6 +1,7 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
 using Domain.Enums;
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
@@ -67,5 +68,13 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     public async Task<IEnumerable<User>> GetByRoleAsync(Role role, CancellationToken cancellationToken = default)
     {
         return await context.Users.Where(u => u.Role == role).ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Activity>> GetRequestsAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        return await context.Activities
+            .Where(a => a.RequestedById == userId)
+            .AddIncludes()
+            .ToListAsync(cancellationToken);
     }
 }
