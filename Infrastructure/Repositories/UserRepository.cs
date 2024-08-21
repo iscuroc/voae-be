@@ -10,14 +10,14 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)
     {
         await context.Users.AddAsync(user, cancellationToken);
-        
+
         await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateAsync(User user, CancellationToken cancellationToken = default)
     {
         context.Users.Update(user);
-        
+
         await context.SaveChangesAsync(cancellationToken);
     }
 
@@ -38,7 +38,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     }
 
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
-    { 
+    {
         return await context.Users.AnyAsync(u => u.Email == email, cancellationToken);
     }
 
@@ -52,7 +52,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     {
         var user = await context.Users
             .FirstOrDefaultAsync(u => u.EmailConfirmationToken == confirmationToken, cancellationToken);
-        
+
         return user;
     }
 
@@ -60,24 +60,20 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     {
         var user = await context.Users
             .FirstOrDefaultAsync(u => u.ResetPasswordToken == resetPasswordToken, cancellationToken);
-        
+
         return user;
     }
-    
+
     public async Task<IEnumerable<User>> GetByRoleAsync(Role role, CancellationToken cancellationToken = default)
     {
         return await context.Users.Where(u => u.Role == role).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<User>> GetUserActivitiesAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task<User?> GetActivitiesAsync(int userId, CancellationToken cancellationToken = default)
     {
         return await context.Users
-            .Where(a => a.Id == userId)
-            .ToListAsync(cancellationToken);
+            .Include(u => u.JoinedActivities)
+            .SingleOrDefaultAsync(u => u.Id == userId, cancellationToken);
     }
 
-    Task<IEnumerable<Activity>> IUserRepository.GetUserActivitiesAsync(int userId, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
 }

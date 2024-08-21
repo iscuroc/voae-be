@@ -23,8 +23,7 @@ public record UserActivitiesQueryHandler(
     public async ValueTask<Result<List<UserActivitiesResponse>>> Handle(UserActivitiesQuery query, CancellationToken cancellationToken)
     {
         var userId = await GetCurrentUserIdAsync(cancellationToken);
-        var activities = await UserRepository.GetUserActivitiesAsync(userId, cancellationToken);
-
+        var activities = await UserRepository.GetActivitiesAsync(userId, cancellationToken);
         return activities.ToResponse();
     }
 }

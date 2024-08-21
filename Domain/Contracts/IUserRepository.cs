@@ -14,5 +14,5 @@ public interface IUserRepository
     Task<User?> GetByConfirmationTokenAsync(string confirmationToken, CancellationToken cancellationToken = default);
     Task<User?> GetByResetPasswordTokenAsync(string resetPasswordToken, CancellationToken cancellationToken = default);
     Task<IEnumerable<User>> GetByRoleAsync(Role role, CancellationToken cancellationToken = default);
-    Task<IEnumerable<Activity>> GetUserActivitiesAsync(int userId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<User>> GetActivitiesAsync (int userId,CancellationToken cancellationToken = default);
 }

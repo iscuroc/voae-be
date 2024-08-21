@@ -18,10 +18,9 @@ public class UsersController(ISender sender) : BaseController
 
     [HttpGet("/my-activities")]
     [ProducesResponseType<List<UserActivitiesResponse>>(StatusCodes.Status200OK)]
-    public async Task<IResult> GetUserActivitiesAsync(CancellationToken cancellationToken)
+    public async Task<IResult> GetActivitiesAsync(CancellationToken cancellationToken)
     {
-        var result = await sender.Send(new GetCurrentUserQuery(), cancellationToken);
-
+        var result = await sender.Send(new UserActivitiesQuery(), cancellationToken);
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
 }

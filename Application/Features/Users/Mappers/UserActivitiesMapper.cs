@@ -11,6 +11,7 @@ public static class UserActivityMapper
             Id: activity.Id,
             Name: activity.Name,
             Description: activity.Description,
+            Scopes: activity.Scopes.ToString(),
             StartDate: activity.StartDate,
             EndDate: activity.EndDate,
             ActivityStatus: activity.ActivityStatus.ToString()

@@ -4,4 +4,4 @@ using Shared;
 
 namespace Application.Features.Users.Queries;
 
-public record UserActivitiesQuery(int UserId) : IQuery<Result<List<UserActivitiesResponse>>>;
+public record UserActivitiesQuery : IQuery<Result<List<UserActivitiesResponse>>>;
