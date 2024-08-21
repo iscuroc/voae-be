@@ -9,7 +9,7 @@ public record UserActivitiesResponse(
     int Id,
     string Name,
     string Description,
-    List<ActivitiesScopeResponse> Scopes,
+    List<ActivitiesScopeResponse> Scope,
     DateTime StartDate,
     DateTime EndDate,
     string Slug,

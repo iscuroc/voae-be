@@ -21,22 +21,25 @@ public record UserActivitiesQueryHandler(
     }
 
     public async ValueTask<Result<List<UserActivitiesResponse>>> Handle(UserActivitiesQuery query, CancellationToken cancellationToken)
-{
-    var userId = await GetCurrentUserIdAsync(cancellationToken);
-    var user = await UserRepository.GetActivitiesAsync(userId, cancellationToken);
+    {
+        var userId = await GetCurrentUserIdAsync(cancellationToken);
+        var user = await UserRepository.GetActivitiesAsync(userId, cancellationToken);
 
-    // Accessing the activities collection from the user object
-    var activitiesResponse = user.JoinedActivities.Select(activity => new UserActivitiesResponse(
-        activity.Id,
-        activity.Activity.Name,
-        activity.Activity.Description,
-        activity.Activity.Scopes.ToString(),
-        activity.Activity.StartDate,
-        activity.Activity.EndDate,
-        activity.Activity.ActivityStatus.ToString()
-    )).ToList();
+        var activitiesResponse = user.JoinedActivities.Select(activity => new UserActivitiesResponse(
+            Id: activity.Activity.Id,
+            Name: activity.Activity.Name,
+            Description: activity.Activity.Description,
+                Scope: activity.Activity.Scopes.Select(scope => new ActivitiesScopeResponse(
+                    ActivityScopes: scope.Scope,
+                    Hours: scope.Hours
+                )).ToList(),
+            StartDate: activity.Activity.StartDate,
+            EndDate: activity.Activity.EndDate,
+            Slug: activity.Activity.Slug,
+            ActivityStatus: activity.Activity.ActivityStatus
+        )).ToList();
 
-    return Result.Success(activitiesResponse);
-}
+        return Result.Success(activitiesResponse);
+    }
 
 }

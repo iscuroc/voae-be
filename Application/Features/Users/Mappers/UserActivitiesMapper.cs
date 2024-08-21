@@ -12,11 +12,10 @@ public static class UserActivityMapper
             Id: activity.Id,
             Name: activity.Name,
             Description: activity.Description,
-            Scopes: new ActivitiesScopeResponse{
-                ActivityScopes = activity.Scopes.Scope,
-                Hours= activity.Scopes.Hours
-            }
-
+            Scope: activity.Scopes.Select(scope => new ActivitiesScopeResponse(
+                ActivityScopes: scope.Scope,
+                Hours: scope.Hours
+            )).ToList(),
             StartDate: activity.StartDate,
             EndDate: activity.EndDate,
             Slug: activity.Slug,
