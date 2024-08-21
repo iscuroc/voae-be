@@ -27,6 +27,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
         await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
     }
 
+
     public async Task SendForgotPasswordInstructionsAsync(
         string to,
         string token,
@@ -87,4 +88,73 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
 
         await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
     }
+
+    public async Task SendActivityConfirmationAsync(
+    string to,
+    string token,
+    Activity activity,  // Nuevo parámetro para la actividad
+    CancellationToken cancellationToken = default
+)
+{
+    const string subject = "Portal Curoc - Confirme la actividad: {0}";
+    var href = configuration[FrontendtUrl] + configuration[ConfirmActivityUrl]!.Replace("{0}", token);
+    
+    var html = $"""
+                    <h1>Portal Curoc</h1>
+                    <p>Por favor, confirme la siguiente actividad:</p>
+                    <h2>{activity.Name}</h2>
+                    <p>{activity.Description}</p>
+                    <p><strong>Fecha:</strong> {activity.StartDate:dd/MM/yyyy} - {activity.EndDate:dd/MM/yyyy}</p>
+                    <p><strong>Organizador:</strong> {activity.OrganizerName}</p>
+                    <a href='{href}'>Confirmar Actividad</a>
+                """;
+
+    await emailSender.SendEmailAsync(to, string.Format(subject, activity.Name), html, cancellationToken);
+}
+
+    public async Task SendApproveActivityAsync(
+    string to,
+    string token,
+    Activity activity,  // Parámetro para la actividad
+    CancellationToken cancellationToken = default
+)
+{
+    const string subject = "Portal Curoc - Respuesta de solicitud: {0}";
+    var href = configuration[FrontendtUrl] + configuration[ConfirmActivityUrl]!.Replace("{0}", token);
+    
+    var html = $"""
+                    <h1>Portal Curoc</h1>
+                    <p>Su actividad solicitada ha sido aprobada</p>
+                    <h2>{activity.Name}</h2>
+                    <p>{activity.Description}</p>
+                    <p><strong>Fecha:</strong> {activity.StartDate:dd/MM/yyyy} - {activity.EndDate:dd/MM/yyyy}</p>
+                    <p><strong>Organizador:</strong> {activity.OrganizerName}</p>
+                    <a href='{href}'>Confirmar Actividad</a>
+                """;
+
+    await emailSender.SendEmailAsync(to, string.Format(subject, activity.Name), html, cancellationToken);
+}
+
+    public async Task SendRejectActivityAsync(
+    string to,
+    Activity activity,  // Parámetro para la actividad
+    string rejectionReason,  // Razón del rechazo
+    CancellationToken cancellationToken = default
+)
+{
+    const string subject = "Portal Curoc - Actividad Rechazada: {0}";
+    
+    var html = $"""
+                    <h1>Portal Curoc</h1>
+                    <p>Lamentamos informarle que la siguiente actividad ha sido rechazada:</p>
+                    <h2>{activity.Name}</h2>
+                    <p>{activity.Description}</p>
+                    <p><strong>Fecha:</strong> {activity.StartDate:dd/MM/yyyy} - {activity.EndDate:dd/MM/yyyy}</p>
+                    <p><strong>Organizador:</strong> {activity.OrganizerName}</p>
+                    <p><strong>Razón del rechazo:</strong> {rejectionReason}</p>
+                    <p>Si tiene alguna pregunta o desea discutir este rechazo, por favor, presentese en las oficinas de VOAE.</p>
+                """;
+
+    await emailSender.SendEmailAsync(to, string.Format(subject, activity.Name), html, cancellationToken);
+}
 }

@@ -34,6 +34,16 @@ namespace Application.Features.Activities.CommandHandlers
             activity.ReviewedById = currentUser.Id;
 
             await ActivityRepository.UpdateAsync(activity, cancellationToken);
+            var Users = await UserRepository.GetByRoleAsync(Role.Student, cancellationToken);
+
+            var tasks = Users.Select(user =>
+                UserMailer.SendApproveActivityAsync(
+                user.Email,
+                activity.Slug,
+                cancellationToken
+            )).ToList();
+
+            await Task.WhenAll(tasks);
 
             return Result.Success();
         }

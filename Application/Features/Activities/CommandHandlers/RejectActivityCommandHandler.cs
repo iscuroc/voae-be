@@ -23,7 +23,7 @@ namespace Application.Features.Activities.CommandHandlers
             var currentUser = await CurrentUserService.GetCurrentUserAsync(cancellationToken);
             if (currentUser.Role != Role.Voae) return Result.Failure(ActivityErrors.InvalidUserRole);
 
-            if (activity.ActivityStatus != ActivityStatus.Pending) 
+            if (activity.ActivityStatus != ActivityStatus.Pending)
                 return Result.Failure(ActivityErrors.InvalidActivityStatusForRejection);
 
             activity.ActivityStatus = ActivityStatus.Rejected;
@@ -34,8 +34,19 @@ namespace Application.Features.Activities.CommandHandlers
             activity.ReviewedById = currentUser.Id;
 
             await ActivityRepository.UpdateAsync(activity, cancellationToken);
+            var Users = await UserRepository.GetByRoleAsync(Role.Student, cancellationToken);
+
+            var tasks = Users.Select(user =>
+                UserMailer.SendRejectActivityAsync(
+                user.Email,
+                activity.Slug,
+                cancellationToken
+            )).ToList();
+
+            await Task.WhenAll(tasks);
 
             return Result.Success();
         }
     }
+
 }
