@@ -1,3 +1,5 @@
+using Application.Features.Activities.Models;
+using Application.Features.Activities.Queries;
 using Application.Features.Users.Models;
 using Application.Features.Users.Queries;
 using Mediator;
@@ -15,6 +17,13 @@ public class UsersController(ISender sender) : BaseController
         var result = await sender.Send(new GetCurrentUserQuery(), cancellationToken); 
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
+    [HttpGet("my-requests")]
+    [ProducesResponseType<List<MyActivityResponse>>(StatusCodes.Status200OK)]
+    public async Task<IResult> GetRequiestsAsync(CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(new GetMyRequestsQuery(), cancellationToken);
+        return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
+    }
 
     [HttpGet("/my-activities")]
     [ProducesResponseType<List<UserActivitiesResponse>>(StatusCodes.Status200OK)]
@@ -23,4 +32,5 @@ public class UsersController(ISender sender) : BaseController
         var result = await sender.Send(new UserActivitiesQuery(), cancellationToken);
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
+
 }
