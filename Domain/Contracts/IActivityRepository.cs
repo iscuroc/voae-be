@@ -23,10 +23,32 @@ public interface IActivityRepository
     Task<Activity?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task UpdateAsync(Activity activity, CancellationToken cancellationToken);
     Task AddMemberAsync(ActivityMember activityMember, CancellationToken cancellationToken);
+    Task<IEnumerable<Activity>> GetCurrentUserRequestsAsync(
+        UserRequestsFilter filters,
+        CancellationToken cancellationToken = default
+    );
+    Task<long> CountUserRequstsAsync(
+        UserRequestsFilter filters,
+        CancellationToken cancellationToken = default
+    );
+
+    public record ActivityFilter : PaginationBase
+{
+    public required string? Name { get; set; }
+    public required int? OrganizerCareerId { get; set; }
+    public required int? OrganizerOrganizationId { get; set; }
+    public required int? ForeingCareerId { get; set; }
+    public required ActivityScopes? Scope { get; set; }
+    public required DateTime? StartDateMin { get; set; }
+    public required DateTime? StartDateMax { get; set; }
+    public required DateTime? EndDateMin { get; set; }
+    public required DateTime? EndDateMax { get; set; }
+    public required ActivityStatus? Status { get; set; }
 }
 
-public record ActivityFilter : PaginationBase
+public record UserRequestsFilter : PaginationBase
 {
+    public required int? Id { get; set; }
     public required string? Name { get; set; }
     public required int? OrganizerCareerId { get; set; }
     public required int? OrganizerOrganizationId { get; set; }

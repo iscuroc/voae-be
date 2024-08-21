@@ -1,5 +1,6 @@
 ﻿using Application.Features.Activities.Commands;
 using Application.Features.Activities.Models;
+using Application.Features.Users.Models;
 using Application.Shared;
 using Domain.Entities;
 using Domain.Enums;
@@ -35,11 +36,12 @@ public static class ActivityMapper
             
         );
     }
-    
+
     public static List<ActivityResponse> ToResponse(this IEnumerable<Activity> activities)
     {
         return activities.Select(activity => activity.ToResponse()).ToList();
     }
+
 
     public static Activity ToEntity(
         this CreateActivityCommand request, 
