@@ -20,9 +20,9 @@ public class UsersController(ISender sender) : BaseController
 
     [HttpGet("my-requests")]
     [ProducesResponseType<List<MyActivityResponse>>(StatusCodes.Status200OK)]
-    public async Task<IResult> GetAsync([FromQuery] GetCurrentUserRequestsQuery query, CancellationToken cancellationToken)
+    public async Task<IResult> GetRequiestsAsync(CancellationToken cancellationToken)
     {
-        var result = await sender.Send(query, cancellationToken);
+        var result = await sender.Send(new GetMyRequestsQuery(), cancellationToken);
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
 }

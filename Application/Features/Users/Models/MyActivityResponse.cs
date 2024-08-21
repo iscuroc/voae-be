@@ -26,30 +26,3 @@ public record MyActivityResponse(
     List<ActivityScopeResponse> Scopes
 );
 
-public record ActivityScopeResponse(
-    int Id,
-    int Hours,
-    ActivityScopes Scope
-);
-
-public record ActivityUserResponse(
-    int Id,
-    string Names,
-    string Lastnames,
-    Role Role
-);
-
-public record ActivityCareerResponse(
-    int Id,
-    string Name
-);
-
-public record ActivityOrganizationResponse(
-    int Id,
-    string Name
-);
-
-public record ActivityOrganizerResponse(
-    ActivityCareerResponse? Career,
-    ActivityOrganizationResponse? Organization
-);

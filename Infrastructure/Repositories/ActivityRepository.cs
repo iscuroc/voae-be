@@ -76,7 +76,7 @@ public class ActivityRepository(ApplicationDbContext context) : IActivityReposit
         await context.ActivityMembers.AddAsync(activityMember, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<IEnumerable<Activity>> GetCurrentUserRequestsAsync(
+    public async Task<IEnumerable<Activity>> GetMyRequestsAsync(
         UserRequestsFilter filters,
         CancellationToken cancellationToken = default
     )
@@ -91,7 +91,7 @@ public class ActivityRepository(ApplicationDbContext context) : IActivityReposit
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<long> CountUserRequstsAsync(
+    public async Task<long> CountMyRequestsAsync(
         UserRequestsFilter filters,
         CancellationToken cancellationToken = default
     )

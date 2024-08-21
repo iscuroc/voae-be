@@ -17,22 +17,25 @@ public interface IActivityRepository
         ActivityFilter filters,
         CancellationToken cancellationToken = default
     );
-    
+
     Task<bool> ExistsBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<Activity?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<Activity?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task UpdateAsync(Activity activity, CancellationToken cancellationToken);
     Task AddMemberAsync(ActivityMember activityMember, CancellationToken cancellationToken);
-    Task<IEnumerable<Activity>> GetCurrentUserRequestsAsync(
-        UserRequestsFilter filters,
-        CancellationToken cancellationToken = default
-    );
-    Task<long> CountUserRequstsAsync(
+
+    Task<IEnumerable<Activity>> GetMyRequestsAsync(
         UserRequestsFilter filters,
         CancellationToken cancellationToken = default
     );
 
-    public record ActivityFilter : PaginationBase
+    Task<long> CountMyRequestsAsync(
+        UserRequestsFilter filters,
+        CancellationToken cancellationToken = default
+    );
+}
+
+public record ActivityFilter : PaginationBase
 {
     public required string? Name { get; set; }
     public required int? OrganizerCareerId { get; set; }
