@@ -1,5 +1,6 @@
 using Application.Features.Users.Models;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.Features.Users.Mappers;
 
@@ -11,10 +12,15 @@ public static class UserActivityMapper
             Id: activity.Id,
             Name: activity.Name,
             Description: activity.Description,
-            Scopes: activity.Scopes.ToString(),
+            Scopes: new ActivitiesScopeResponse{
+                ActivityScopes = activity.Scopes.Scope,
+                Hours= activity.Scopes.Hours
+            }
+
             StartDate: activity.StartDate,
             EndDate: activity.EndDate,
-            ActivityStatus: activity.ActivityStatus.ToString()
+            Slug: activity.Slug,
+            ActivityStatus: activity.ActivityStatus
         );
     }
 

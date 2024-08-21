@@ -72,7 +72,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     public async Task<User?> GetActivitiesAsync(int userId, CancellationToken cancellationToken = default)
     {
         return await context.Users
-            .Include(u => u.JoinedActivities)
+            .Include(u => u.JoinedActivities).ThenInclude(u => u.Scopes)
             .SingleOrDefaultAsync(u => u.Id == userId, cancellationToken);
     }
 }

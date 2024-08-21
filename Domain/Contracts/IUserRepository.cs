@@ -16,5 +16,4 @@ public interface IUserRepository
     Task<IEnumerable<User>> GetByRoleAsync(Role role, CancellationToken cancellationToken = default);
     Task<User?>GetActivitiesAsync (int userId,CancellationToken cancellationToken = default);
     
-
 }
