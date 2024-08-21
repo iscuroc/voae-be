@@ -69,4 +69,10 @@ public class ActivityRepository(ApplicationDbContext context) : IActivityReposit
         context.Activities.Update(activity);
         await context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task AddMemberAsync(ActivityMember activityMember, CancellationToken cancellationToken)
+    {
+        await context.ActivityMembers.AddAsync(activityMember, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
+    }
 }

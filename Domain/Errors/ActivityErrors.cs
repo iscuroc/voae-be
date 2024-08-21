@@ -8,6 +8,7 @@ public static class ActivityErrors
         "Activity.ActivityNameAlreadyExists",
         $"An Activity with the name {name} already exists"
     );
+
     public static Error SupervisorNotFound => Error.NotFound(
         "Activity.SupervisorNotFound",
         "Supervisor was not found"
@@ -71,5 +72,24 @@ public static class ActivityErrors
     public static Error InvalidApprovalUserRole => Error.Conflict(
         "Activity.InvalidApprovalUserRole",
         "Activity can only be approved by VOAE users"
+    );
+
+    public static Error InvalidJoinUserRole => Error.Conflict(
+        "Activity.InvalidJoinUserRole",
+        "Activity can only be joined by a student"
+    );
+
+    public static Error InvalidActivityStatus => Error.Conflict(
+        "Activity.InvalidActivityStatus",
+        "Activity can only be joined if its status is Published"
+    );
+
+    public static Error AlreadyJoinedActivity => Error.Conflict(
+        "Activity.AlreadyJoinedActivity",
+        "User already joined the activity"
+    );
+    public static Error InvalidScope => Error.Conflict(
+        "Activity.InvalidScope",
+        "The scope is not valid for the activity"
     );
 }
