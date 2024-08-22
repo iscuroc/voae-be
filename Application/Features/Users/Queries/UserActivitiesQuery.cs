@@ -3,7 +3,6 @@ using Mediator;
 using Shared;
 using System.Collections.Generic;
 
-namespace Application.Features.Users.Queries
-{
-    public record UserActivitiesQuery : IQuery<Result<List<UserActivitiesResponse>>>;
-}
+namespace Application.Features.Users.Queries;
+public record UserActivitiesQuery : IQuery<Result<List<UserActivitiesResponse>>>;
+

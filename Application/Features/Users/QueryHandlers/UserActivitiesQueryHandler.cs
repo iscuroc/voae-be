@@ -10,27 +10,21 @@ namespace Application.Features.Users.QueryHandlers;
 
 public record UserActivitiesQueryHandler(
     IUserRepository UserRepository,
-    IActivityRepository ActivityRepository,
-    ICurrentUserService CurrentUserService
+    ICurrentUserService CurrentUserService,
+    IActivityRepository ActivityRepository
 ) : IQueryHandler<UserActivitiesQuery, Result<List<UserActivitiesResponse>>>
 {
-    private async Task<int> GetCurrentUserIdAsync(CancellationToken cancellationToken)
-    {
-        var currentUser = await CurrentUserService.GetCurrentUserAsync();
-        return currentUser.Id;
-    }
-
     public async ValueTask<Result<List<UserActivitiesResponse>>> Handle(UserActivitiesQuery query, CancellationToken cancellationToken)
     {
         var userId = await GetCurrentUserIdAsync(cancellationToken);
         var user = await UserRepository.GetActivitiesAsync(userId, cancellationToken);
-
+        
         var activitiesResponse = user.JoinedActivities.Select(member => new UserActivitiesResponse(
             Id: member.Activity.Id,
             Name: member.Activity.Name,
             Description: member.Activity.Description,
-                Scope: member.Scopes.Select(scope => new ActivitiesScopeResponse(
-                    ActivityScopes: scope.MemberScope,
+                Scopes: member.Scopes.Select(scope => new ActivitiesScopeResponse(
+                    ActivityScope: scope.MemberScope,
                     Hours: scope.Hours
                 )).ToList(),
             StartDate: member.Activity.StartDate,
@@ -40,6 +34,11 @@ public record UserActivitiesQueryHandler(
         )).ToList();
 
         return Result.Success(activitiesResponse);
+    }
+    private async Task<int> GetCurrentUserIdAsync(CancellationToken cancellationToken)
+    {
+        var currentUser = await CurrentUserService.GetCurrentUserAsync();
+        return currentUser.Id;
     }
 
 }
