@@ -69,12 +69,18 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     {
         return await context.Users.Where(u => u.Role == role).ToListAsync(cancellationToken);
     }
-
     public async Task<IEnumerable<Activity>> GetRequestsAsync(int userId, CancellationToken cancellationToken = default)
     {
         return await context.Activities
             .Where(a => a.RequestedById == userId)
             .AddIncludes()
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<User?> GetActivitiesAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        return await context.Users
+            .Include(u => u.JoinedActivities).ThenInclude(u => u.Scopes)
+            .SingleOrDefaultAsync(u => u.Id == userId, cancellationToken);
     }
 }
