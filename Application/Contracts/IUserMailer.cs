@@ -32,7 +32,7 @@ public interface IUserMailer
 
     Task SendRejectActivityAsync(
         string to,
-        string ReviewerObservations,
+        List<string> ReviewerObservations,
         CancellationToken cancellationToken = default
     );
 

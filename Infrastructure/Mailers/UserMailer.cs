@@ -90,15 +90,22 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
     }
     public async Task SendRejectActivityAsync(
     string to,
-    string ReviewerObservations,
+    List<string> ReviewerObservations,
     CancellationToken cancellationToken = default)
     {
         const string subject = "Actividad Rechazada en Portal CUROC";
+
+        var observationsHtml = string.Join("", ReviewerObservations.Select(observation => $"<li>{observation}</li>"));
+
         var html = $"""
                 <h1>Actividad Rechazada</h1>
                 <p>Lamentamos informarte que tu actividad ha sido rechazada.</p>
+                <hr><hr>
                 <h1>Observaciones</h1>
-                <p>{ReviewerObservations}</p>
+                <ul>
+                    {observationsHtml}
+                </ul>
+                <hr><hr><hr>
                 <p>Por favor, revisa los detalles y realiza las modificaciones necesarias antes de volver a enviarla.</p>
                 """;
 
@@ -112,10 +119,13 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
         const string subject = "Actividad Aprobada en Portal CUROC";
         var html = $"""
                 <h1>¡Actividad Aprobada!</h1>
-                <p>Nos complace informarte que tu actividad con el identificador ha sido aprobada.</p>
+                <p>Nos complace informarte que tu actividad ha sido aprobada.</p>
+                <p>Puede proseguir con los siguientes pasos:</p>
+                <p>1. Subir un banner de la actividad (en caso de que no lo tenga)</p>
+                <p>2. Publicar la actividad</p>
                 <p>Puedes continuar con los siguientes pasos según lo planeado.</p>
                 """;
 
         await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
-    }
+    }
 }

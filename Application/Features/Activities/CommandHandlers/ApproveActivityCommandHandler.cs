@@ -2,6 +2,7 @@
 using Application.Features.Activities.Commands;
 using Domain.Contracts;
 using Domain.Enums;
+using Domain.Entities;
 using Domain.Errors;
 using Mediator;
 using Shared;
@@ -35,10 +36,10 @@ namespace Application.Features.Activities.CommandHandlers
             activity.ReviewedById = currentUser.Id;
 
             await ActivityRepository.UpdateAsync(activity, cancellationToken);
-            if (currentUser != null)
+            if (activity.RequestedBy != null)
             {
                 await UserMailer.SendApproveActivityAsync(
-                    currentUser.Email,
+                    activity.RequestedBy.Email,
                     cancellationToken
             );
             }

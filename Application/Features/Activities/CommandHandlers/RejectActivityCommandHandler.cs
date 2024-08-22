@@ -2,6 +2,7 @@ using Application.Contracts;
 using Application.Features.Activities.Commands;
 using Domain.Contracts;
 using Domain.Enums;
+using Domain.Entities;
 using Domain.Errors;
 using Mediator;
 using Shared;
@@ -34,15 +35,21 @@ namespace Application.Features.Activities.CommandHandlers
                 : $"{activity.ReviewerObservations}|{request.ReviewerObservation}";
             activity.ReviewedById = currentUser.Id;
 
+            var observationsList = activity.ReviewerObservations?
+            .Split('|')
+            .ToList()
+            ?? new List<string>();
+
+
             await ActivityRepository.UpdateAsync(activity, cancellationToken);
-            if (currentUser != null)
+            if (activity.RequestedBy != null)
             {
                 await UserMailer.SendRejectActivityAsync(
-                    currentUser.Email,
-                    activity.ReviewerObservations,
+                    activity.RequestedBy.Email,
+                     observationsList,
                     cancellationToken
             );
-            }
+            }
 
             return Result.Success();
         }
