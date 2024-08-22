@@ -18,8 +18,8 @@ public record UserActivitiesQueryHandler(
     {
         var userId = await GetCurrentUserIdAsync(cancellationToken);
         var user = await UserRepository.GetActivitiesAsync(userId, cancellationToken);
-        
-        var activitiesResponse = user.JoinedActivities.Select(member => new UserActivitiesResponse(
+
+        var activitiesResponse = user!.JoinedActivities.Select(member => new UserActivitiesResponse(
             Id: member.Activity.Id,
             Name: member.Activity.Name,
             Description: member.Activity.Description,
