@@ -84,6 +84,7 @@ public record UpdateActivityCommandHandler(
         activity.Location = request.Location;
         activity.MainActivities = request.MainActivities.MapListToString();
         activity.Organizers = organizers;
+        activity.ActivityStatus = ActivityStatus.Pending;
         
 
         await ActivityRepository.UpdateAsync(activity, cancellationToken);
