@@ -84,4 +84,13 @@ public class ActivitiesController(ISender sender) : BaseController
         var result = await sender.Send(command, cancellationToken);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
     }
+    
+    [HttpPut("{id:int}/banner")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+public async Task<IResult> PutAsync(int id, [FromForm] UpdateBannerRequest request, CancellationToken cancellationToken)
+    {
+        var command = new ActivityBannerCommand(id, request.Banner);
+        var result = await sender.Send(command, cancellationToken);
+        return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
+    }
 }

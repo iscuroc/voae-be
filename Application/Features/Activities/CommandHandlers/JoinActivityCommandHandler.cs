@@ -21,7 +21,7 @@ public record JoinActivityCommandHandler(
         if (activity is null) return Result.Failure(ActivityErrors.ActivityNotFound);
 
         if (activity.ActivityStatus != ActivityStatus.Published)
-            return Result.Failure(ActivityErrors.InvalidActivityStatus);
+            return Result.Failure(ActivityErrors.InvalidJoinedStatus);
 
         var currentUser = await CurrentUserService.GetCurrentUserAsync(cancellationToken);
         if (currentUser.Role != Role.Student)
