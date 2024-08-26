@@ -25,7 +25,7 @@ public class UsersController(ISender sender) : BaseController
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
 
-    [HttpGet("/my-activities")]
+    [HttpGet("my-activities")]
     [ProducesResponseType<List<UserActivitiesResponse>>(StatusCodes.Status200OK)]
     public async Task<IResult> GetActivitiesAsync(CancellationToken cancellationToken)
     {
