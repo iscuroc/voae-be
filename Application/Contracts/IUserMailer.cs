@@ -39,6 +39,7 @@ public interface IUserMailer
 
     Task SendActivityRejectAsync(
         string to,
+        string activitySlug,
         List<string> reviewerObservations,
         CancellationToken cancellationToken = default
     );

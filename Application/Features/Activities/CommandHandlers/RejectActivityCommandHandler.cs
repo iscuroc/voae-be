@@ -33,7 +33,7 @@ namespace Application.Features.Activities.CommandHandlers
 
             var reviewerObservations = activity.ReviewerObservations!.MapStringToList();
             var user = await UserRepository.GetByIdAsync(activity.RequestedById, cancellationToken);
-            await UserMailer.SendActivityRejectAsync(user!.Email, reviewerObservations, cancellationToken);
+            await UserMailer.SendActivityRejectAsync(user!.Email, activity.Slug, reviewerObservations, cancellationToken);
 
             await ActivityRepository.UpdateAsync(activity, cancellationToken);
 
