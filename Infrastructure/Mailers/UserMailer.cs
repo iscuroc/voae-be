@@ -9,7 +9,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
     private const string ConfirmAccountUrl = "UserMailer:ConfirmAccountUrl";
     private const string ResetPasswordUrl = "UserMailer:ResetPasswordUrl";
     private const string ActivityRequestedUrl = "UserMailer:ActivityRequestedUrl";
-    
+
     public async Task SendConfirmationInstructionsAsync(
         string to,
         string token,
@@ -87,4 +87,35 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
 
         await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
     }
+
+    public async Task SendActivityApprovedAsync(string to, string activitySlug, CancellationToken cancellationToken = default)
+{
+    const string subject = "Actividad Aprobada en Portal CUROC";
+    var html = $"""
+                    <h1>Tu actividad ha sido aprobada</h1>
+                    <p>La actividad "{activitySlug}" ha sido aprobada y ya está disponible en el portal.</p>
+                """;
+
+    await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
+}
+
+
+    public async Task SendActivityRejectAsync(string to, List<string> reviewerObservations, CancellationToken cancellationToken = default)
+    {
+        const string subject = "Actividad Rechazada en Portal CUROC";
+
+        var observationsList = string.Join("<br>", reviewerObservations);
+
+        var html = $"""
+                    <h1>Actividad Rechazada</h1>
+                    <p>La actividad que has solicitado ha sido rechazada.</p>
+                    <p>Observaciones:</p>
+                    <p>{observationsList}</p>
+                """;
+
+        await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
+    }
+
+
+
 }
