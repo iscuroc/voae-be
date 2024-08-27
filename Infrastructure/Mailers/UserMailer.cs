@@ -93,7 +93,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
     const string subject = "Actividad Aprobada en Portal CUROC";
     var html = $"""
                     <h1>Tu actividad ha sido aprobada</h1>
-                    <p>La actividad {activityName} ha sido aprobada y ya está disponible en el portal.</p>
+                    <p>La actividad "{activityName}" ha sido aprobada y ya está disponible en el portal.</p>
                 """;
 
     await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
@@ -108,7 +108,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
 
         var html = $"""
                     <h1>Actividad Rechazada</h1>
-                    <p>La actividad {activityName} ha sido rechazada.</p>
+                    <p>La actividad "{activityName}" ha sido rechazada.</p>
                     <p>Observaciones:</p>
                     <ul>
                         <p>{observationsList}</p>
