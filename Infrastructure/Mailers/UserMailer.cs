@@ -88,19 +88,19 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
         await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
     }
 
-    public async Task SendActivityApprovedAsync(string to, string activitySlug, CancellationToken cancellationToken = default)
+    public async Task SendActivityApprovedAsync(string to, string activityName, CancellationToken cancellationToken = default)
 {
     const string subject = "Actividad Aprobada en Portal CUROC";
     var html = $"""
                     <h1>Tu actividad ha sido aprobada</h1>
-                    <p>La actividad "{activitySlug}" ha sido aprobada y ya está disponible en el portal.</p>
+                    <p>La actividad {activityName} ha sido aprobada y ya está disponible en el portal.</p>
                 """;
 
     await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
 }
 
 
-    public async Task SendActivityRejectAsync(string to,string activitySlug, List<string> reviewerObservations, CancellationToken cancellationToken = default)
+    public async Task SendActivityRejectAsync(string to,string activityName, List<string> reviewerObservations, CancellationToken cancellationToken = default)
     {
         const string subject = "Actividad Rechazada en Portal CUROC";
 
@@ -108,7 +108,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
 
         var html = $"""
                     <h1>Actividad Rechazada</h1>
-                    <p>La actividad "{activitySlug}" ha sido rechazada.</p>
+                    <p>La actividad {activityName} ha sido rechazada.</p>
                     <p>Observaciones:</p>
                     <ul>
                         <p>{observationsList}</p>

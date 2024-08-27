@@ -32,14 +32,14 @@ public interface IUserMailer
 
     Task SendActivityApprovedAsync(
         string to,
-        string activitySlug,
+        string activityName,
         CancellationToken cancellationToken = default
 
     );
 
     Task SendActivityRejectAsync(
         string to,
-        string activitySlug,
+        string activityName,
         List<string> reviewerObservations,
         CancellationToken cancellationToken = default
     );

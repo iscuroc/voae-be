@@ -29,7 +29,7 @@ namespace Application.Features.Activities.CommandHandlers
             
             var user = await UserRepository.GetByIdAsync(activity.RequestedById, cancellationToken);
 
-            await UserMailer.SendActivityApprovedAsync(user!.Email, activity.Slug, cancellationToken);
+            await UserMailer.SendActivityApprovedAsync(user!.Email, activity.Name, cancellationToken);
             
             await ActivityRepository.UpdateAsync(activity, cancellationToken);
 
