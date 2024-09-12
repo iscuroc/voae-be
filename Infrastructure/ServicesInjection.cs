@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Text;
+using Amazon.Runtime;
+using Amazon.S3;
 using Application.Contracts;
 using Infrastructure.EmailSender;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -50,5 +52,18 @@ public static class ServicesInjection
                 };
             }
         );
+        
+        // S3 Settings
+        var awsOptions = new AmazonS3Config
+        {
+            ServiceURL = configuration["AWS:ServiceUrl"]
+        };
+        
+        var awsCredentials = new BasicAWSCredentials(
+            configuration["AWS:AccessKey"],
+            configuration["AWS:SecretKey"]
+        );
+        var s3Client = new AmazonS3Client(awsCredentials, awsOptions);
+        services.AddSingleton<IAmazonS3>(s3Client);
     }
 }

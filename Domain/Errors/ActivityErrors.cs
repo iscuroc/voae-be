@@ -112,4 +112,9 @@ public static class ActivityErrors
         "Activity.InvalidBannerType",
         "The banner must be a jpeg or png image"
     );
+
+    public static Error BannerUploadFailed => Error.Conflict(
+        "Activity.BannerUploadFailed",
+        "The banner could not be uploaded"
+    );
 }
