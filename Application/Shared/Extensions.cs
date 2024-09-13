@@ -15,11 +15,11 @@ public static partial class Extensions
         return listValue.Count <= 0 ? "" : string.Join(separator, listValue);
     }
     
-    public static string Slugify(this string value)
+    public static string Slugify(this string value, params string[] whitelistChars)
     {
         var normalizedText = value.ToLower().Normalize(NormalizationForm.FormD);
         
-        var reg = OnlyCharactersRegex();
+        var reg = OnlyCharactersRegex(whitelistChars);
         var onlyCharacters = reg.Replace(normalizedText, "");
 
         return onlyCharacters
@@ -29,7 +29,9 @@ public static partial class Extensions
             .TrimEnd('-');
     }
 
-    // Don't remove the space character in the regex
-    [GeneratedRegex("[^a-zA-Z0-9 ]")] 
-    private static partial Regex OnlyCharactersRegex();
+    private static Regex OnlyCharactersRegex(IEnumerable<string> whitelistChars)
+    {
+        var whitelistPattern = string.Join("", whitelistChars.Select(Regex.Escape));
+        return new Regex($"[^a-zA-Z0-9 {whitelistPattern}]");
+    }
 }

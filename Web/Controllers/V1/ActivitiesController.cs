@@ -24,7 +24,7 @@ public class ActivitiesController(ISender sender) : BaseController
         var result = await sender.Send(query, cancellationToken);
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
-    
+
     [HttpGet("by-slug/{slug}")]
     [ProducesResponseType<ActivityResponse>(StatusCodes.Status200OK)]
     public async Task<IResult> GetBySlugAsync(string slug, CancellationToken cancellationToken)
@@ -36,7 +36,8 @@ public class ActivitiesController(ISender sender) : BaseController
 
     [HttpPut("{id:int}/approve")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResult> PutAsync(int id, [FromBody] ApproveActivityRequest request, CancellationToken cancellationToken)
+    public async Task<IResult> PutAsync(int id, [FromBody] ApproveActivityRequest request,
+        CancellationToken cancellationToken)
     {
         var command = new ApproveActivityCommand(id, request.ReviewerObservation);
         var result = await sender.Send(command, cancellationToken);
@@ -45,24 +46,28 @@ public class ActivitiesController(ISender sender) : BaseController
 
     [HttpPut("{id:int}/reject")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResult> PutAsync(int id, [FromBody] RejectActivityRequest request, CancellationToken cancellationToken)
+    public async Task<IResult> PutAsync(int id, [FromBody] RejectActivityRequest request,
+        CancellationToken cancellationToken)
     {
         var command = new RejectActivityCommand(id, request.ReviewerObservation);
         var result = await sender.Send(command, cancellationToken);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
     }
-    
+
     [HttpPut("{id:int}/join")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResult> PutAsync(int id, [FromBody] JoinActivityRequest request, CancellationToken cancellationToken)
+    public async Task<IResult> PutAsync(int id, [FromBody] JoinActivityRequest request,
+        CancellationToken cancellationToken)
     {
         var command = new JoinActivityCommand(id, request.Scopes);
         var result = await sender.Send(command, cancellationToken);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
     }
+
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResult> PutAsync(int id, [FromBody] UpdateActivityRequest request, CancellationToken cancellationToken)
+    public async Task<IResult> PutAsync(int id, [FromBody] UpdateActivityRequest request,
+        CancellationToken cancellationToken)
     {
         var command = new UpdateActivityCommand(
             id,
@@ -80,14 +85,16 @@ public class ActivitiesController(ISender sender) : BaseController
             request.MainActivities,
             request.Organizers
         );
-        
+
         var result = await sender.Send(command, cancellationToken);
         return result.IsSuccess ? Results.Ok() : result.ToProblemDetails();
     }
-    
+
     [HttpPut("{id:int}/banner")]
+    [Consumes("multipart/form-data")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-public async Task<IResult> PutAsync(int id, [FromForm] UpdateBannerRequest request, CancellationToken cancellationToken)
+    public async Task<IResult> PutAsync(int id, [FromForm] UpdateBannerRequest request,
+        CancellationToken cancellationToken)
     {
         var command = new ActivityBannerCommand(id, request.Banner);
         var result = await sender.Send(command, cancellationToken);

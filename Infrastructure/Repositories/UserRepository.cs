@@ -77,10 +77,13 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<User?> GetActivitiesAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ActivityMember>> GetMyActivitiesAsync(int userId, CancellationToken cancellationToken = default)
     {
-        return await context.Users
-            .Include(u => u.JoinedActivities).ThenInclude(u => u.Scopes)
-            .SingleOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        return await context.ActivityMembers
+            .Where(m => m.MemberId == userId)
+            .Include(m => m.Scopes)
+            .Include(m => m.Activity)
+            .ThenInclude(a => a.Scopes)
+            .ToListAsync(cancellationToken);
     }
 }

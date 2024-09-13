@@ -9,7 +9,8 @@ public record UserActivitiesResponse(
     int Id,
     string Name,
     string Description,
-    List<ActivitiesScopeResponse> Scopes,
+    List<ActivitiesScopeResponse> MemberScopes,
+    List<ActivitiesScopeResponse> ActivityScopes,
     DateTime StartDate,
     DateTime EndDate,
     string Slug,
@@ -18,7 +19,7 @@ public record UserActivitiesResponse(
 
 public record struct ActivitiesScopeResponse(
 
-    ActivityScopes ActivityScope,
+    ActivityScopes Scope,
     int Hours
 
 );

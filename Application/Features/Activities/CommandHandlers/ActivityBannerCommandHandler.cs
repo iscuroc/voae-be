@@ -35,6 +35,9 @@ public record ActivityBannerCommandHandler(
         var folderName = $"activities/{activity.Id}";
         var bannerUrl = await StorageService.UploadAsync(request.Banner, folderName);
         
+        if(string.IsNullOrWhiteSpace(bannerUrl)) 
+            return Result.Failure(ActivityErrors.BannerUploadFailed);
+        
         activity.BannerLink = bannerUrl;
         await ActivityRepository.UpdateAsync(activity, cancellationToken);
 
