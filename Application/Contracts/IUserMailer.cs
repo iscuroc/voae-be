@@ -29,4 +29,18 @@ public interface IUserMailer
         string activitySlug, 
         CancellationToken cancellationToken = default
     );
+
+    Task SendActivityApprovedAsync(
+        string to,
+        string activityName,
+        CancellationToken cancellationToken = default
+
+    );
+
+    Task SendActivityRejectAsync(
+        string to,
+        string activityName,
+        List<string> reviewerObservations,
+        CancellationToken cancellationToken = default
+    );
 }

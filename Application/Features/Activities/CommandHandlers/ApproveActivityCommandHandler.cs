@@ -11,6 +11,7 @@ namespace Application.Features.Activities.CommandHandlers
     public record ApproveActivityCommandHandler(
         IActivityRepository ActivityRepository,
         IUserRepository UserRepository,
+        IUserMailer UserMailer,
         ICurrentUserService CurrentUserService
     ) : ICommandHandler<ApproveActivityCommand, Result>
     {
@@ -23,16 +24,13 @@ namespace Application.Features.Activities.CommandHandlers
             var currentUser = await CurrentUserService.GetCurrentUserAsync(cancellationToken);
             if (currentUser.Role != Role.Voae) return Result.Failure(ActivityErrors.InvalidApprovalUserRole);
 
-            if (!(activity.ActivityStatus == ActivityStatus.Pending || activity.ActivityStatus == ActivityStatus.Rejected))
-                return Result.Failure(ActivityErrors.InvalidActivityStatusForApproval);
-
             activity.ActivityStatus = ActivityStatus.Approved;
             activity.LastReviewedAt = DateTime.UtcNow;
-            activity.ReviewerObservations = string.IsNullOrEmpty(activity.ReviewerObservations)
-                ? request.ReviewerObservation
-                : $"{activity.ReviewerObservations}|{request.ReviewerObservation}";
-            activity.ReviewedById = currentUser.Id;
+            
+            var user = await UserRepository.GetByIdAsync(activity.RequestedById, cancellationToken);
 
+            await UserMailer.SendActivityApprovedAsync(user!.Email, activity.Name, cancellationToken);
+            
             await ActivityRepository.UpdateAsync(activity, cancellationToken);
 
             return Result.Success();

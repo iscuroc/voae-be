@@ -1,5 +1,6 @@
 using Application.Contracts;
 using Application.Features.Activities.Commands;
+using Application.Shared;
 using Domain.Contracts;
 using Domain.Enums;
 using Domain.Errors;
@@ -11,6 +12,7 @@ namespace Application.Features.Activities.CommandHandlers
     public record RejectActivityCommandHandler(
         IActivityRepository ActivityRepository,
         IUserRepository UserRepository,
+        IUserMailer UserMailer,
         ICurrentUserService CurrentUserService
     ) : ICommandHandler<RejectActivityCommand, Result>
     {
@@ -23,15 +25,15 @@ namespace Application.Features.Activities.CommandHandlers
             var currentUser = await CurrentUserService.GetCurrentUserAsync(cancellationToken);
             if (currentUser.Role != Role.Voae) return Result.Failure(ActivityErrors.InvalidUserRole);
 
-            if (activity.ActivityStatus != ActivityStatus.Pending) 
+            if (activity.ActivityStatus != ActivityStatus.Pending)
                 return Result.Failure(ActivityErrors.InvalidActivityStatusForRejection);
 
             activity.ActivityStatus = ActivityStatus.Rejected;
             activity.LastReviewedAt = DateTime.UtcNow;
-            activity.ReviewerObservations = string.IsNullOrEmpty(activity.ReviewerObservations)
-                ? request.ReviewerObservation
-                : $"{activity.ReviewerObservations}|{request.ReviewerObservation}";
-            activity.ReviewedById = currentUser.Id;
+
+            var reviewerObservations = activity.ReviewerObservations!.MapStringToList();
+            var user = await UserRepository.GetByIdAsync(activity.RequestedById, cancellationToken);
+            await UserMailer.SendActivityRejectAsync(user!.Email, activity.Name, reviewerObservations, cancellationToken);
 
             await ActivityRepository.UpdateAsync(activity, cancellationToken);
 
