@@ -11,7 +11,7 @@ public static class UserMapper
     {
         return new UserResponse(
             Id: user.Id,
-            Names: user.Names!,
+            Names: user.Names,
             Lastnames: user.Lastnames!,
             AccountNumber: user.AccountNumber!.Value,
             Role: user.Role,

@@ -34,7 +34,7 @@ public class RegisterUserCommandHandler(
             user.EmailConfirmationToken!, 
             cancellationToken
         );
-        
+        Console.WriteLine(user.EmailConfirmationToken);
         return Result.Success();
     }
 }

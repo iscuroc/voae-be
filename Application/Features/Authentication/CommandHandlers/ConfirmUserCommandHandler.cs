@@ -11,7 +11,8 @@ public class ConfirmUserCommandHandler(
     IUserRepository userRepository,
     IUserMailer userMailer,
     IPasswordHasher passwordHasher,
-    ICareerRepository careerRepository
+    ICareerRepository careerRepository,
+    IOrganizationRepository organizationRepository
 ) : ICommandHandler<ConfirmUserCommand, Result>
 {
     public async ValueTask<Result> Handle(ConfirmUserCommand request, CancellationToken cancellationToken)
@@ -45,8 +46,17 @@ public class ConfirmUserCommandHandler(
 
         var careerExists = await careerRepository.ExistsAsync(request.CareerId, cancellationToken);
         if (!careerExists) return Result.Failure(CareerErrors.CareerNotFound);
-
+        
         user.CareerId = request.CareerId;
+        
+        user.Organizations.Clear();
+        foreach (var organizationId in request.OrganizationIds)
+        {
+            var organization = await organizationRepository.GetByIdAsync(organizationId, cancellationToken);
+            if (organization is null) return Result.Failure(OrganizationErrors.OrganizationNotFound);
+            
+            user.Organizations.Add(organization);
+        }
 
         await userRepository.UpdateAsync(user, cancellationToken);
 
