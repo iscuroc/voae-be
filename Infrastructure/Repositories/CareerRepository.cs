@@ -24,7 +24,8 @@ public class CareerRepository(ApplicationDbContext context) : ICareerRepository
 
     public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await context.Careers.AnyAsync(x => x.Id == id, cancellationToken);
+        return await context.Careers
+            .AnyAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<IEnumerable<User>> GetTeachersByIdAsync(

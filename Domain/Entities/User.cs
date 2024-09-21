@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Domain.Base;
+﻿using Domain.Base;
 using Domain.Enums;
 
 namespace Domain.Entities;
@@ -29,7 +28,7 @@ public class User : EntityBase
     public ICollection<Activity> SupervisedActivities { get; set; } = null!;
     public ICollection<Activity> CoordinatedActivities { get; set; } = null!;
     public ICollection<Activity> ReviewedActivities { get; set; } = null!;
-    public ICollection<Organization> Organizations { get; set; } = null!;
+    public ICollection<Organization> Organizations { get; set; } = new List<Organization>();
     public ICollection<ActivityMember> JoinedActivities { get; set; } = null!;
 
     public void SetRoleByEmail()

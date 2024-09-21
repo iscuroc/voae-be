@@ -40,9 +40,5 @@ public static class AuthenticationErrors
         "Account not found"
     );
     
-    public static Error NotAuthenticated => Error.Unauthorized(
-        "Authentication.NotAuthenticated",
-        "Not authenticated"
-    );
     
 }

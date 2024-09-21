@@ -17,4 +17,10 @@ public class OrganizationRepository(ApplicationDbContext context): IOrganization
         return await context.Organizations
             .FindAsync([id], cancellationToken);
     }
+
+    public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await context.Organizations
+            .AnyAsync(o => o.Id == id, cancellationToken);
+    }
 };
