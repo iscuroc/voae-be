@@ -35,6 +35,35 @@ public static class ActivityMapper
             Coordinator: activity.Coordinator.ToResponse(),
             RequestedBy: activity.RequestedBy.ToResponse(),
             ForeingCareers: activity.ForeingCareers.ToResponse(),
+            Scopes: activity.Scopes.ToResponse()
+        );
+    }
+
+    public static ActivityResponseWithMembers ToResponseWithMembers(this Activity activity)
+    {
+        return new ActivityResponseWithMembers(
+            Id: activity.Id,
+            Slug: activity.Slug,
+            Name: activity.Name,
+            Description: activity.Description,
+            Location: activity.Location,
+            MainActivities: activity.MainActivities.MapStringToList(),
+            Goals: activity.Goals.MapStringToList(),
+            StartDate: activity.StartDate,
+            EndDate: activity.EndDate,
+            TotalSpots: activity.TotalSpots,
+            BannerLink: activity.BannerLink,
+            LastRequestedAt: activity.LastRequestedAt,
+            ActivityStatus: activity.ActivityStatus,
+            LastReviewedAt: activity.LastReviewedAt,
+            ReviewObservations: !string.IsNullOrWhiteSpace(activity.ReviewerObservations)
+                ? activity.ReviewerObservations.MapStringToList()
+                : [],
+            Organizers: activity.Organizers.ToResponse(),
+            Supervisor: activity.Supervisor.ToResponse(),
+            Coordinator: activity.Coordinator.ToResponse(),
+            RequestedBy: activity.RequestedBy.ToResponse(),
+            ForeingCareers: activity.ForeingCareers.ToResponse(),
             Scopes: activity.Scopes.ToResponse(),
             Members: activity.Members.Select(m => new ActivityMemberResponse(
                 Id: m.Member.Id,
