@@ -1,3 +1,4 @@
+using Application.Features.Activities.Models;
 using Application.Features.Users.Models;
 using Domain.Entities;
 using Domain.Enums;

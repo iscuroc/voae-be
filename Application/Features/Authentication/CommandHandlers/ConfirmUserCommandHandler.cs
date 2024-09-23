@@ -50,7 +50,7 @@ public class ConfirmUserCommandHandler(
         user.CareerId = request.CareerId;
         
         user.Organizations.Clear();
-        foreach (var organizationId in request.OrganizationIds)
+        foreach (var organizationId in request?.OrganizationIds ?? new List<int>())
         {
             var organization = await organizationRepository.GetByIdAsync(organizationId, cancellationToken);
             if (organization is null) return Result.Failure(OrganizationErrors.OrganizationNotFound);

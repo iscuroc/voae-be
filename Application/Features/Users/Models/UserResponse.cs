@@ -8,6 +8,7 @@ namespace Application.Features.Users.Models
         string Lastnames,
         long AccountNumber,
         Role Role,
+        string Email,
         UserCareerResponse? Career,
         List<UserOrganizationResponse> Organizations
     );

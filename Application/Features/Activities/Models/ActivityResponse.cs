@@ -23,13 +23,23 @@ public record ActivityResponse(
     ActivityUserResponse Coordinator,
     ActivityUserResponse RequestedBy,
     List<ActivityCareerResponse> ForeingCareers,
-    List<ActivityScopeResponse> Scopes
+    List<ActivityScopeResponse> Scopes,
+    List<ActivityMemberResponse> Members
 );
 
 public record ActivityScopeResponse(
     int Id,
     int Hours,
     ActivityScopes Scope
+);
+
+public record ActivityMemberResponse(
+    int Id,
+    string? Names,
+    string Lastnames,
+    long? Account,
+    string Career,
+    IEnumerable<ActivityScopes> Scopes
 );
 
 public record ActivityUserResponse(

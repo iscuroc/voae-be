@@ -62,4 +62,16 @@ public static class ActivityRelationsMapper
     {
         return organizers.Select(organizer => organizer.ToResponse()).ToList();
     }
+    
+    public static List<ActivityMemberResponse> ToResponse(this IEnumerable<ActivityMember> members)
+    {
+        return members.Select(member => new ActivityMemberResponse(
+            Id: member.Id,
+            Names: member.Member.Names ?? "",
+            Lastnames: member.Member.Lastnames ?? "",
+            Account: member.Member.AccountNumber,
+            Career: member.Member.Career?.Name ?? "",
+            Scopes: member.Scopes.Select(scope => scope.MemberScope).ToList()
+        )).ToList();
+    }
 }

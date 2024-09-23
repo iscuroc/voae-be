@@ -74,3 +74,4 @@ msbuild.wrn
 nlog.debug.config
 Web/appsettings.Development.json
 database/
+*.development.json

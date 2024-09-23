@@ -14,26 +14,26 @@
     networks:
       - portal-curoc-network
   db:
-    image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: portal-curoc-db
+    image: postgres
+    restart: always
+    command: postgres -c listen_addresses='*'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/var/lib/postgresql/data/placeholder/
+    ports:
+      - "5433:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
     networks:
       - portal-curoc-network
-    restart: always
-    environment:
-      SA_PASSWORD: "pass@1234"
-      ACCEPT_EULA: "Y"
-    ports:
-      - "1433:1433"
-    volumes:
-      - sql-server-data:/var/opt/mssql/
-      - sqldata:/var/opt/sqlserver/data
 
 networks:
   portal-curoc-network:
     name: portal-curoc-network
 
 volumes:
-  sqldata:
-  sql-server-data:
-  portal-curoc-db:
+  db:
     driver: local

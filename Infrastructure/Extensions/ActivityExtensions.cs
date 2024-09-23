@@ -19,32 +19,32 @@ public static class ActivityExtensions
 
         if (filters.OrganizerCareerId.HasValue)
             query = query.Where(a => a.Organizers.Any(o => o.CareerId == filters.OrganizerCareerId));
-        
+
         if (filters.OrganizerOrganizationId.HasValue)
             query = query.Where(a => a.Organizers.Any(o => o.OrganizationId == filters.OrganizerOrganizationId));
-        
+
         if (filters.ForeingCareerId.HasValue)
             query = query.Where(a => a.ForeingCareers.Any(fc => fc.Id == filters.ForeingCareerId));
 
         if (filters.Scope.HasValue)
             query = query.Where(a => a.Scopes.Any(s => s.Scope == filters.Scope));
 
-        if (filters is {StartDateMin: not null, StartDateMax: not null})
+        if (filters is { StartDateMin: not null, StartDateMax: not null })
             query = query.Where(a => a.StartDate >= filters.StartDateMin && a.StartDate <= filters.StartDateMax);
-        
-        if (filters is {StartDateMin: not null, StartDateMax: null})
+
+        if (filters is { StartDateMin: not null, StartDateMax: null })
             query = query.Where(a => a.StartDate >= filters.StartDateMin);
-        
-        if (filters is {StartDateMin: null, StartDateMax: not null})
+
+        if (filters is { StartDateMin: null, StartDateMax: not null })
             query = query.Where(a => a.StartDate <= filters.StartDateMax);
-        
-        if (filters is {EndDateMin: not null, EndDateMax: not null})
+
+        if (filters is { EndDateMin: not null, EndDateMax: not null })
             query = query.Where(a => a.EndDate >= filters.EndDateMin && a.EndDate <= filters.EndDateMax);
-        
-        if (filters is {EndDateMin: not null, EndDateMax: null})
+
+        if (filters is { EndDateMin: not null, EndDateMax: null })
             query = query.Where(a => a.EndDate >= filters.EndDateMin);
-        
-        if (filters is {EndDateMin: null, EndDateMax: not null})
+
+        if (filters is { EndDateMin: null, EndDateMax: not null })
             query = query.Where(a => a.EndDate <= filters.EndDateMax);
 
         if (filters.Status.HasValue)
@@ -111,9 +111,12 @@ public static class ActivityExtensions
             .Include(a => a.ForeingCareers)
             .Include(a => a.Scopes)
             .Include(a => a.RequestedBy)
-            .Include(a => a.ReviewedBy)
             .Include(a => a.Members)
-            .ThenInclude(m => m.Scopes);
+            .ThenInclude(m => m.Scopes)
+            .Include(m => m.Members)
+            .ThenInclude(m => m.Member).ThenInclude(m => m.Career)
+            .Include(a => a.ReviewedBy)
+            .AsSplitQuery();
 
         return query;
     }
