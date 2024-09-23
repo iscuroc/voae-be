@@ -10,12 +10,12 @@ namespace Application.Features.Activities.QueryHandlers;
 
 public record GetActivityBySlugQueryHandler(
     IActivityRepository ActivityRepository
-) : IQueryHandler<GetActivityBySlugQuery, Result<ActivityResponse>>
+) : IQueryHandler<GetActivityBySlugQuery, Result<ActivityResponseWithMembers>>
 {
-    public async ValueTask<Result<ActivityResponse>> Handle(GetActivityBySlugQuery query, CancellationToken cancellationToken)
+    public async ValueTask<Result<ActivityResponseWithMembers>> Handle(GetActivityBySlugQuery query, CancellationToken cancellationToken)
     {
         var activity = await ActivityRepository.GetBySlugAsync(query.Slug, cancellationToken);
 
-        return activity?.ToResponse() ?? Result.Failure<ActivityResponse>(ActivityErrors.ActivitySlugNotFound);
+        return activity?.ToResponseWithMembers() ?? Result.Failure<ActivityResponseWithMembers>(ActivityErrors.ActivitySlugNotFound);
     }
 }
