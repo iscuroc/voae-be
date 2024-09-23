@@ -17,6 +17,6 @@ public class JoinActivityValidator : AbstractValidator<JoinActivityCommand>
 
         RuleForEach(x => x.Scopes)
             .NotNull()
-            .NotEmpty();
+            .IsInEnum();
     }
 }

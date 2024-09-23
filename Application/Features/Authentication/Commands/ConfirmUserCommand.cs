@@ -9,7 +9,7 @@ public record ConfirmUserCommand(
     long AccountNumber,
     string Password,
     int CareerId,
-    List<int> OrganizationIds,
+    List<int>? OrganizationIds,
     string PasswordConfirmation,
     string EmailConfirmationToken
 ) : ICommand<Result>;

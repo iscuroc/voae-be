@@ -34,7 +34,12 @@ public interface IUserMailer
         string to,
         string activityName,
         CancellationToken cancellationToken = default
-
+    );
+    
+    Task SendActivityPublishedAsync(
+        string to,
+        string activityName,
+        CancellationToken cancellationToken = default
     );
 
     Task SendActivityRejectAsync(

@@ -38,7 +38,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
         var html = $"""
                         <h1>Portal Curoc</h1>
                         <p>Por favor, restablezca su contraseña haciendo clic en el siguiente enlace:</p>
-                        <a href='{href}/reset-password?token={token}'>Restablecer contraseña</a>
+                        <a href='{href}'>Restablecer contraseña</a>
                     """;
 
         await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
@@ -98,6 +98,17 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
 
     await emailSender.SendEmailAsync(to, subject, html, cancellationToken);
 }
+
+    public Task SendActivityPublishedAsync(string to, string activityName, CancellationToken cancellationToken = default)
+    {
+        const string subject = "Actividad Publicada en Portal CUROC";
+        var html = $"""
+                    <h1>Actividad Publicada</h1>
+                    <p>La actividad "{activityName}" ha sido publicada y ya está disponible en el portal.</p>
+                """;
+
+        return emailSender.SendEmailAsync(to, subject, html, cancellationToken);
+    }
 
 
     public async Task SendActivityRejectAsync(string to,string activityName, List<string> reviewerObservations, CancellationToken cancellationToken = default)

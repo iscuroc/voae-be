@@ -1,5 +1,6 @@
 ﻿using Application.Features.Activities.Commands;
 using Application.Features.Activities.Models;
+using Application.Features.Users.Mappers;
 using Application.Features.Users.Models;
 using Application.Shared;
 using Domain.Entities;
@@ -34,7 +35,15 @@ public static class ActivityMapper
             Coordinator: activity.Coordinator.ToResponse(),
             RequestedBy: activity.RequestedBy.ToResponse(),
             ForeingCareers: activity.ForeingCareers.ToResponse(),
-            Scopes: activity.Scopes.ToResponse()
+            Scopes: activity.Scopes.ToResponse(),
+            Members: activity.Members.Select(m => new ActivityMemberResponse(
+                Id: m.Member.Id,
+                Names: m.Member?.Names ?? "",
+                Lastnames: m.Member?.Lastnames ?? "",
+                Account: m.Member?.AccountNumber ?? 0,
+                Career: m.Member?.Career?.Name ?? "",
+                Scopes: m.Scopes.Select(s => s.MemberScope).ToList()
+            )).ToList()
         );
     }
 

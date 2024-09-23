@@ -8,6 +8,11 @@ public static class ActivityErrors
         "Activity.ActivityNameAlreadyExists",
         $"An Activity with the name {name} already exists"
     );
+    
+    public static Error ActivityBannerRequired => Error.BadRequest(
+        "Activity.ActivityBannerRequired",
+        "The banner is required"
+    );
 
     public static Error SupervisorNotFound => Error.NotFound(
         "Activity.SupervisorNotFound",

@@ -15,6 +15,7 @@ public static class UserMapper
             Lastnames: user.Lastnames!,
             AccountNumber: user.AccountNumber!.Value,
             Role: user.Role,
+            Email: user.Email,
             Career: user.CareerId is not null ? user.Career!.ToResponse() : null,
             Organizations: user.Organizations.ToResponse()
         );
