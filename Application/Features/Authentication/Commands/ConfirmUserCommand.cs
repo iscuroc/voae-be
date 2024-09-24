@@ -8,7 +8,7 @@ public record ConfirmUserCommand(
     string Lastnames,
     long AccountNumber,
     string Password,
-    int CareerId,
+    int? CareerId,
     List<int>? OrganizationIds,
     string PasswordConfirmation,
     string EmailConfirmationToken

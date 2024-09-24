@@ -44,8 +44,11 @@ public class ConfirmUserCommandHandler(
             await userRepository.AccoutNumberExistsAsync(request.AccountNumber, cancellationToken);
         if (anotherAccountExists) return Result.Failure(AuthenticationErrors.AccountNumberInUse);
 
-        var careerExists = await careerRepository.ExistsAsync(request.CareerId, cancellationToken);
-        if (!careerExists) return Result.Failure(CareerErrors.CareerNotFound);
+        if (request.CareerId.HasValue)
+        {
+            var careerExists = await careerRepository.ExistsAsync((int)request.CareerId, cancellationToken);
+            if (!careerExists) return Result.Failure(CareerErrors.CareerNotFound);
+        }
         
         user.CareerId = request.CareerId;
         
