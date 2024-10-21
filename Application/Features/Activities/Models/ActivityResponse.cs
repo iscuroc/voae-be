@@ -1,3 +1,4 @@
+using Application.Features.Activities.Commands;
 using Domain.Enums;
 
 namespace Application.Features.Activities.Models;
@@ -74,12 +75,14 @@ public record ActivityUserResponse(
 
 public record ActivityCareerResponse(
     int Id,
-    string Name
+    string Name,
+    OrganizerType Type
 );
 
 public record ActivityOrganizationResponse(
     int Id,
-    string Name
+    string Name,
+    OrganizerType Type
 );
 
 public record ActivityOrganizerResponse(

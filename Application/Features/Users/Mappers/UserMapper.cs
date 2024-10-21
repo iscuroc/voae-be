@@ -1,3 +1,4 @@
+using Application.Features.Activities.Commands;
 using Application.Features.Activities.Models;
 using Application.Features.Users.Models;
 using Application.Shared;
@@ -19,6 +20,22 @@ public static class UserMapper
             Career: user.CareerId is not null ? user.Career!.ToResponse() : null,
             Organizations: user.Organizations.ToResponse()
         );
+    }
+
+    public static UsersByRoleResponse ToSimpleResponse(this User user)
+    {
+        return new UsersByRoleResponse(
+            Id: user.Id,
+            Names: user.Names,
+            Email: user.Email,
+            Role: user.Role,
+            CareerName: user.Career?.Name
+        );
+    }
+
+    public static List<UsersByRoleResponse> ToSimpleResponse(this IEnumerable<User> users)
+    {
+        return users.Select(user => user.ToSimpleResponse()).ToList();
     }
 
     public static List<UserResponse> ToResponse(this IEnumerable<User> users)
@@ -51,28 +68,30 @@ public static class UserMapper
     {
         return organizations.Select(organization => organization.ToResponse()).ToList();
     }
-    
+
     public static ActivityCareerResponse ToActivityResponse(this Career career)
     {
         return new ActivityCareerResponse(
             Id: career.Id,
-            Name: career.Name
+            Name: career.Name,
+            OrganizerType.Career
         );
     }
-    
+
     public static List<ActivityCareerResponse> ToActivityResponse(this IEnumerable<Career> careers)
     {
         return careers.Select(career => career.ToActivityResponse()).ToList();
     }
-    
+
     public static ActivityOrganizationResponse ToActivityResponse(this Organization organization)
     {
         return new ActivityOrganizationResponse(
             Id: organization.Id,
-            Name: organization.Name
+            Name: organization.Name,
+            OrganizerType.Organization
         );
     }
-    
+
     public static ActivityOrganizerResponse ToResponse(this ActivityOrganizer organizer)
     {
         return new ActivityOrganizerResponse(
@@ -80,12 +99,12 @@ public static class UserMapper
             Organization: organizer.OrganizationId is not null ? organizer.Organization!.ToActivityResponse() : null
         );
     }
-    
+
     public static List<ActivityOrganizerResponse> ToResponse(this IEnumerable<ActivityOrganizer> organizers)
     {
         return organizers.Select(organizer => organizer.ToResponse()).ToList();
     }
-    
+
     public static ActivityScopeResponse ToResponse(this ActivityScope scope)
     {
         return new ActivityScopeResponse(
@@ -94,12 +113,12 @@ public static class UserMapper
             Scope: scope.Scope
         );
     }
-    
+
     public static List<ActivityScopeResponse> ToResponse(this IEnumerable<ActivityScope> scopes)
     {
         return scopes.Select(scope => scope.ToResponse()).ToList();
     }
-    
+
     public static ActivityUserResponse ToActivityResponse(this User user)
     {
         return new ActivityUserResponse(
