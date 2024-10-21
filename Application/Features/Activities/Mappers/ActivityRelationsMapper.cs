@@ -1,4 +1,5 @@
-﻿using Application.Features.Activities.Models;
+﻿using Application.Features.Activities.Commands;
+using Application.Features.Activities.Models;
 using Domain.Entities;
 
 namespace Application.Features.Activities.Mappers;
@@ -23,7 +24,8 @@ public static class ActivityRelationsMapper
     {
         return new ActivityCareerResponse(
             Id: career.Id,
-            Name: career.Name
+            Name: career.Name,
+            OrganizerType.Career
         );
     }
 
@@ -46,7 +48,8 @@ public static class ActivityRelationsMapper
     {
         return new ActivityOrganizationResponse(
             Id: organization.Id,
-            Name: organization.Name
+            Name: organization.Name,
+            OrganizerType.Organization
         );
     }
 

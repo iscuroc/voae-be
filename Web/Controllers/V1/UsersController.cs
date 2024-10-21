@@ -2,7 +2,9 @@ using Application.Features.Activities.Models;
 using Application.Features.Activities.Queries;
 using Application.Features.Users.Models;
 using Application.Features.Users.Queries;
+using Domain.Contracts;
 using Mediator;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Extensions;
 
@@ -14,9 +16,10 @@ public class UsersController(ISender sender) : BaseController
     [ProducesResponseType<UserResponse>(StatusCodes.Status200OK)]
     public async Task<IResult> GetAsync(CancellationToken cancellationToken)
     {
-        var result = await sender.Send(new GetCurrentUserQuery(), cancellationToken); 
+        var result = await sender.Send(new GetCurrentUserQuery(), cancellationToken);
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
+
     [HttpGet("my-requests")]
     [ProducesResponseType<List<MyActivityResponse>>(StatusCodes.Status200OK)]
     public async Task<IResult> GetRequestsAsync(CancellationToken cancellationToken)
@@ -33,4 +36,12 @@ public class UsersController(ISender sender) : BaseController
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
 
+    [HttpGet("by-role")]
+    [ProducesResponseType<List<UsersByRoleResponse>>(StatusCodes.Status200OK)]
+  
+    public async Task<IResult> GetUsersByRoleAsync([FromQuery] UserFilter filters, CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(new GetUsersByRoleQuery(filters), cancellationToken);
+        return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
+    }
 }

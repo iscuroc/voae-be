@@ -11,14 +11,14 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)
     {
         await context.Users.AddAsync(user, cancellationToken);
-        
+
         await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateAsync(User user, CancellationToken cancellationToken = default)
     {
         context.Users.Update(user);
-        
+
         await context.SaveChangesAsync(cancellationToken);
     }
 
@@ -39,7 +39,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     }
 
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
-    { 
+    {
         return await context.Users.AnyAsync(u => u.Email == email, cancellationToken);
     }
 
@@ -53,22 +53,53 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     {
         var user = await context.Users
             .FirstOrDefaultAsync(u => u.EmailConfirmationToken == confirmationToken, cancellationToken);
-        
+
         return user;
     }
 
-    public async Task<User?> GetByResetPasswordTokenAsync(string resetPasswordToken, CancellationToken cancellationToken = default)
+    public async Task<User?> GetByResetPasswordTokenAsync(string resetPasswordToken,
+        CancellationToken cancellationToken = default)
     {
         var user = await context.Users
             .FirstOrDefaultAsync(u => u.ResetPasswordToken == resetPasswordToken, cancellationToken);
-        
+
         return user;
     }
-    
+
     public async Task<IEnumerable<User>> GetByRoleAsync(Role role, CancellationToken cancellationToken = default)
     {
         return await context.Users.Where(u => u.Role == role).ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<User>> GetPagedAsync(
+        UserFilter filters,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var query = context.Users.AsQueryable();
+
+        return await query
+            .Include(u => u.Career)
+            .ApplyFilters(filters)
+            .Page(filters.PageNumber, filters.PageSize)
+            .OrderBy(a => a.Names)
+            .ToListAsync(cancellationToken);
+    }
+
+
+    public async Task<long> CountAsync(
+        UserFilter filters,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var query = context.Users.AsQueryable();
+
+        return await query
+            .OrderByDescending(a => a.CreatedAt)
+            .ApplyFilters(filters)
+            .CountAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<Activity>> GetRequestsAsync(int userId, CancellationToken cancellationToken = default)
     {
         return await context.Activities
@@ -77,7 +108,8 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ActivityMember>> GetMyActivitiesAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ActivityMember>> GetMyActivitiesAsync(int userId,
+        CancellationToken cancellationToken = default)
     {
         return await context.ActivityMembers
             .Where(m => m.MemberId == userId)

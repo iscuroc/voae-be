@@ -26,7 +26,7 @@ public class ActivitiesController(ISender sender) : BaseController
     }
 
     [HttpGet("by-slug/{slug}")]
-    [ProducesResponseType<ActivityResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ActivityResponseWithMembers>(StatusCodes.Status200OK)]
     public async Task<IResult> GetBySlugAsync(string slug, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetActivityBySlugQuery(slug), cancellationToken);
