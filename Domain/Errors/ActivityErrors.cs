@@ -122,4 +122,8 @@ public static class ActivityErrors
         "Activity.BannerUploadFailed",
         "The banner could not be uploaded"
     );
+    public static Error InvalidActivityStatusForPublishing => Error.Conflict(
+        "Activity.InvalidActivityStatusForPublishing",
+        "Activity can only be published if its status is Approved"
+    );
 }

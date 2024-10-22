@@ -21,6 +21,8 @@ namespace Application.Features.Activities.CommandHandlers
 
             if (string.IsNullOrWhiteSpace(activity.BannerLink))
                 return Result.Failure(ActivityErrors.ActivityBannerRequired);
+            if(activity.ActivityStatus != ActivityStatus.Approved)
+                return Result.Failure(ActivityErrors.InvalidActivityStatusForPublishing);
 
             activity.ActivityStatus = ActivityStatus.Published;
 
