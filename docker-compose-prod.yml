@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  api:
+    container_name: portal-curoc-api
+    build:
+      context: .
+      dockerfile: Web/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=4000
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    networks:
+      - portal-curoc-network
+  db:
+    container_name: portal-curoc-db
+    image: postgres
+    restart: always
+    command: postgres -c listen_addresses='*'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/var/lib/postgresql/data/placeholder/
+    ports:
+      - "54333:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+    networks:
+      - portal-curoc-network
+
+networks:
+  portal-curoc-network:
+    name: portal-curoc-network
+
+volumes:
+  db:
+    driver: local
