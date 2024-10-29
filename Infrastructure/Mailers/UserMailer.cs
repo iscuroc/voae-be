@@ -36,7 +36,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
         const string subject = "Portal Curoc - Restablezca su contraseña";
         var href = configuration[FrontendtUrl] + configuration[ResetPasswordUrl]!.Replace("{0}", token);
         var html = $"""
-                        <h1>Portal Curoc</h1>
+                        <h1>Portal VOAE</h1>
                         <p>Por favor, restablezca su contraseña haciendo clic en el siguiente enlace:</p>
                         <a href='{href}'>Restablecer contraseña</a>
                     """;
