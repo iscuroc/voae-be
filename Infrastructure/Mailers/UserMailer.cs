@@ -31,6 +31,7 @@ public class UserMailer(IEmailSender emailSender, IConfiguration configuration) 
         string to,
         string token,
         CancellationToken cancellationToken = default
+        
     )
     {
         const string subject = "Portal Curoc - Restablezca su contraseña";
