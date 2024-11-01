@@ -9,10 +9,13 @@ public class ConfirmUserCommandValidator: AbstractValidator<ConfirmUserCommand>
     {
         RuleFor(x => x.Password)
             .MinimumLength(8)
-            .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$")
-            .WithMessage("Password must be at least 8 characters long " +
-                         "and include at least one uppercase letter, " +
-                         "one lowercase letter, one number, and one special character.");
+            .Matches(@"^(?=.*\d)")
+            .WithMessage("Password must contain at least one number")
+            .Matches(@"^(?=.*[@$!%^*?&])")
+            .WithMessage("Password must contain at least one special character")
+            .Matches(@"^(?=.*[A-Z])")
+            .WithMessage("Password must contain at least one uppercase letter");
+
         
         RuleFor(x => x.PasswordConfirmation)
             .Equal(x => x.Password)
